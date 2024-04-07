@@ -4,6 +4,11 @@ import sys
 
 def main_menu(screen, background):
     running = True
+    def play_button_clicked():
+        print("Play button clicked")
+        return
+
+    play_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2, 200, 50, "Play", play_button_clicked)
 
     while running:
         screen.blit(background, (0, 0))
@@ -11,11 +16,7 @@ def main_menu(screen, background):
         draw_text(screen, "CyberSavvy Adventures", pygame.font.Font(*TITLE_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4)
 
         # Play Button
-        def play_button_clicked():
-            print("Play button clicked")
-            return
 
-        play_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2, 200, 50, "Play", play_button_clicked)
         play_button.draw(screen)
 
 
