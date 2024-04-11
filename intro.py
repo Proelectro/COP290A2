@@ -38,7 +38,12 @@ def intro(screen, background):
             elif event.type == pygame.KEYDOWN:
                 pass
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                next_button(pygame.mouse.get_pos())
-                prev_button(pygame.mouse.get_pos())
-                
+                try:
+                    next_button(pygame.mouse.get_pos())
+                except:
+                    return 3
+                try:
+                    prev_button(pygame.mouse.get_pos())
+                except:
+                    pass
     return 0

@@ -4,20 +4,23 @@ import sys
 
 def main_menu(screen, background):
     running = True
-    def play_button_clicked():
-        print("Play button clicked")
+    
+    def story_mode():
         return
 
-    play_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2, 200, 50, "Play", play_button_clicked)
+    def arcade_mode():
+        return
+
+    story_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2, 200, 50, "Story Mode", story_mode)
+    arcade_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 + 100, 200, 50, "Arcade Mode", arcade_mode)
 
     while running:
         screen.blit(background, (0, 0))
         
-        draw_text(screen, "CyberSavvy Adventures", pygame.font.Font(*TITLE_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4)
+        draw_text(screen, "Main Menu", pygame.font.Font(*TITLE_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4)
 
-        # Play Button
-
-        play_button.draw(screen)
+        story_button.draw(screen)
+        arcade_button.draw(screen)
 
 
         pygame.display.update()
@@ -29,7 +32,7 @@ def main_menu(screen, background):
             elif event.type == pygame.KEYDOWN:
                 pass
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if play_button(pygame.mouse.get_pos()):
-                    return 2
+                if arcade_button(pygame.mouse.get_pos()):
+                    return 4
     
     return 0

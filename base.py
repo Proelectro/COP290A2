@@ -44,13 +44,13 @@ class ScrollText:
         self.index += 1
         self.scroll_pos_x_speed = 0
         if self.index >= len(self.text_list):
-            self.index = 0
+            raise IndexError("End of text list")
             
     def prev(self):
         self.index -= 1
         self.scroll_pos_x_speed = 0
         if self.index < 0:
-            self.index = len(self.text_list) - 1
+            raise IndexError("Start of text list")
 
 def draw_text(screen, text, font, color, x, y):
     text_surface = font.render(text, True, color)
