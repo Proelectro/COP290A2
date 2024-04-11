@@ -34,16 +34,18 @@ def intro(screen, background):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-                return 0
+                return STATE.EXIT
             elif event.type == pygame.KEYDOWN:
                 pass
             elif event.type == pygame.MOUSEBUTTONDOWN:
+                
                 try:
                     next_button(pygame.mouse.get_pos())
-                except:
-                    return 3
+                except IndexError:
+                    return STATE.MAIN_MENU
+                
                 try:
                     prev_button(pygame.mouse.get_pos())
-                except:
+                except IndexError:
                     pass
     return 0

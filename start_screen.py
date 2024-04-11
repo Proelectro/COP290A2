@@ -25,11 +25,11 @@ def start_screen(screen, background):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-                return 0
+                return STATE.EXIT
             elif event.type == pygame.KEYDOWN:
                 pass
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button(pygame.mouse.get_pos()):
-                    return 2
+                    return STATE.INTRO
     
     return 0

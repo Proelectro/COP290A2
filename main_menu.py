@@ -28,11 +28,11 @@ def main_menu(screen, background):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-                return 0
+                return STATE.EXIT
             elif event.type == pygame.KEYDOWN:
                 pass
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if arcade_button(pygame.mouse.get_pos()):
-                    return 4
+                    return STATE.ARCADE
     
     return 0
