@@ -7,7 +7,7 @@ class Player:
         self.y = y
         self.width = 50
         self.height = 50
-        self.vel = 5
+        self.vel = 1
         self.hitbox = (self.x, self.y, self.width, self.height)
 
     def draw(self, screen):
@@ -98,7 +98,7 @@ def rocket(screen, background):
             if bullet.y < 0:
                 bullet_active = False
         
-        if random.randint(0, 100) == 0:
+        if random.randint(0, 5000) == 0:
             viruses.append(Virus(random.randint(0, SCREEN_WIDTH - 50), 0, 0.1))
         
         for virus in viruses:
@@ -122,6 +122,6 @@ def rocket(screen, background):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     if not bullet_active:
-                        bullet = Bullet(player.x + player.width // 2, player.y, 5)
+                        bullet = Bullet(player.x + player.width // 2, player.y, 1)
                         bullet_active = True
         player.move()

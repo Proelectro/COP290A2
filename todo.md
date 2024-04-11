@@ -16,7 +16,7 @@
 
 5. [More questions](https://it.tamu.edu/cybercircus/booth/plinko/)
 
-6. 
+6. [Maze Genrator ALgorithm](https://courses.cs.washington.edu/courses/cse326/08sp/lectures/18-disjoint-union-find.pdf)
 
 
 In most countries, a large percentage of children
