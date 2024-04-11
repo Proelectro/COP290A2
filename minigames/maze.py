@@ -94,6 +94,8 @@ def play_maze(filename):
     pygame.quit()
     sys.exit()
 
+
+
 if __name__ == "__main__":
     filename = "maze.txt"  # Change this to your maze file
     play_maze(filename)

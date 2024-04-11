@@ -1,9 +1,8 @@
 run:
 	python main.py
-gitpush:
+git:
+	git pull origin main
 	git add .
 	git commit -m commit
 	git push origin main
-
-gitpull:
-	git pull origin main
+	
