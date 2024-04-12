@@ -7,7 +7,7 @@ class Player:
         self.y = y
         self.width = 50
         self.height = 50
-        self.vel = 1
+        self.vel = 0.2
         self.hitbox = (self.x, self.y, self.width, self.height)
 
     def draw(self, screen):
@@ -98,7 +98,7 @@ def rocket(screen, background):
             if bullet.y < 0:
                 bullet_active = False
         
-        if random.randint(0, 5000) == 0:
+        if random.randint(0, 100 * 10 ** len(viruses)) == 0:
             viruses.append(Virus(random.randint(0, SCREEN_WIDTH - 50), 0, 0.1))
         
         for virus in viruses:
@@ -107,7 +107,7 @@ def rocket(screen, background):
             if virus.check_collision_player(player):
                 return STATE.ARCADE
             if bullet_active:
-                if virus.check_collision_bullet(bullet):
+                if virus.check_collision_bullet(bullet) or virus.y > SCREEN_HEIGHT:
                     viruses.remove(virus)
                     bullet_active = False
         

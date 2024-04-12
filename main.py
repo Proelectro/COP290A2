@@ -7,6 +7,7 @@ from main_menu import main_menu
 from arcade import arcade
 from message import message
 from rocket import rocket
+from bruteforce import bruteforce
 
 
 pygame.init()
@@ -27,7 +28,7 @@ background_4 = pygame.image.load('images/background.jpg')
 
 if __name__ == "__main__":
     # state = STATE.START_SCREEN
-    state = STATE.ROCKET
+    state = STATE.BRUTEFORCE
     
     while state:
         if state == STATE.START_SCREEN:
@@ -46,7 +47,9 @@ if __name__ == "__main__":
             state = message(screen, background_1, "Rocket Game", ["This is the rocket game", "It is a game where you have to dodge asteroids", "Good luck!"])
             if state == STATE.EXIT:
                 break
-            state = rocket(screen, background_1)            
+            state = rocket(screen, background_1)
+        elif state == STATE.BRUTEFORCE:
+            state = bruteforce(screen, background_1)            
             
         else:
             print("Invalid state", state)

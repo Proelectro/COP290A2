@@ -1,7 +1,7 @@
 import pygame
 
 class Button:
-    def __init__(self, x, y, width, height, text, on_click):
+    def __init__(self, x, y, width, height, text, on_click = lambda: None):
         self.rect = pygame.Rect(x, y, width, height)
         self.text = text
         self.on_click = on_click
@@ -65,6 +65,7 @@ class STATE:
     MAIN_MENU = 3
     ARCADE = 4
     ROCKET = 5
+    BRUTEFORCE = 6
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 550
