@@ -2,6 +2,7 @@
 #include <vector>
 #include <utility>
 #include <fstream>
+#include <cstdlib>
 using namespace std;
 
 class DSU
@@ -70,7 +71,9 @@ public:
     ofstream fout;
     ofstream fout2;
 
-    int start_x, start_y, end_x, end_y;
+    int start_x = 0;
+    int start_y = 0;
+    int end_x, end_y;
 
     Maze(int n, int m)
     {
@@ -88,6 +91,7 @@ public:
             }
         }
         // shuffle the edges in a random order
+                srand(time(NULL));
         for (int i = 0; i < edges.size(); i++)
         {
             int j = rand() % edges.size();
@@ -96,14 +100,15 @@ public:
         // initialize fout to maze.txt
         fout.open("maze.txt");
         fout2.open("mazehist.txt");
-        start_x = rand() % m;
-        start_y = rand() % n;
+        // start_x = rand() % m;
+        // start_y = rand() % n;
         end_x = rand() % m;
         end_y = rand() % n;
     }
 
     void generate()
     {
+
         for (auto edge : edges)
         {
             int u = edge.first;
@@ -112,7 +117,7 @@ public:
             {
                 dsu.unite(u, v);
                 maze.push_back({u, v});
-                // print(false);
+                print(false);
             }
         }
     }
@@ -161,16 +166,12 @@ public:
             (boo ? fout : fout2) << endl;
         }
 
-        (boo ? fout : fout2) << endl;
     }
 };
 
 int main()
 {
-    int n, m;
-    cin >> n >> m;
-    Maze maze(n, m);
-    cout << maze.start_x << " " << maze.start_y<<endl ;
+    Maze maze(10, 10);
     maze.generate();
     maze.print(true);
     return 0;
