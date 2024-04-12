@@ -81,13 +81,13 @@ def rocket(screen, background):
     running = True
     
     player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT - 100)
-    
+    score = 0
     bullet = None    
     bullet_active = False
-    
+    game_over = False
     viruses = []
     
-    while running:
+    while running and not game_over:
         screen.blit(background, (0, 0))
         
         player.draw(screen)
@@ -105,9 +105,16 @@ def rocket(screen, background):
             virus.draw(screen)
             virus.move()
             if virus.check_collision_player(player):
-                return STATE.ARCADE
+                game_over = True
+                break
             if bullet_active:
-                if virus.check_collision_bullet(bullet) or virus.y > SCREEN_HEIGHT:
+                if virus.check_collision_bullet(bullet):
+                    viruses.remove(virus)
+                    bullet_active = False
+                    score += 1
+                    if score >= 4:
+                        return -1
+                if virus.y > SCREEN_HEIGHT:
                     viruses.remove(virus)
                     bullet_active = False
         
@@ -125,3 +132,18 @@ def rocket(screen, background):
                         bullet = Bullet(player.x + player.width // 2, player.y, 1)
                         bullet_active = True
         player.move()
+        
+    while game_over:
+        screen.blit(background, (0, 0))
+        draw_text(screen, "Game Over", pygame.font.Font(*TITLE_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+        draw_text(screen, "Click to return to the main menu", pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
+        pygame.display.update()
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                game_over = False
+                return 0
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    return STATE.MAIN_MENU
