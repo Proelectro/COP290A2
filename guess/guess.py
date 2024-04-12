@@ -5,10 +5,12 @@ pygame.init()
 # Create TextInput-object
 textinput = pygame_textinput.TextInputVisualizer()
 
-screen = pygame.display.set_mode((1000, 200))
+screen = pygame.display.set_mode((1000, 1000))
 clock = pygame.time.Clock()
 textoutput = pygame.font.Font(None, 36)
 feedback = textoutput.render("Hello", True, (0, 0, 0))
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
 
 
 def has_length(s):
@@ -52,9 +54,15 @@ def constraint(s):
 
     num_constraints = len(constraints)
 
+    output = []
+
     for i in range(num_constraints):
         if not constraints[i](s):
-            return messages[i]
+            output.append((messages[i], RED))
+            output = output[::-1]
+            return output
+        else:
+            output.append((messages[i], GREEN))
     
     return "Your password is strong"
 
@@ -67,8 +75,13 @@ while True:
     textinput.update(events)
     # Blit its surface onto the screen
     screen.blit(textinput.surface, (10, 10))
-    feedback = textoutput.render(constraint(textinput.value), True, (0, 0, 0))
-    screen.blit(feedback, (10, 50))
+    contraints = constraint(textinput.value)
+    const_x = 10
+    const_y = 50
+    for containt in contraints:
+        feedback = textoutput.render(containt[0], True, containt[1])
+        screen.blit(feedback, (const_x, const_y) )
+        const_y += 30
 
     for event in events:
         if event.type == pygame.QUIT:
