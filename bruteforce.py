@@ -12,7 +12,6 @@ class Grid:
         self.center_pos = center_pos
         
     def update(self, grid):
-        print(grid)
         self.grid = [[[BLUE, RED][x] for x in row] for row in grid]
     
     def __eq__(self, value) -> bool:

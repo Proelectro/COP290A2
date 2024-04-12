@@ -5,9 +5,10 @@ class Button:
         self.rect = pygame.Rect(x, y, width, height)
         self.text = text
         self.on_click = on_click
-
+        self.color = GRAY
+        
     def draw(self, screen):
-        pygame.draw.rect(screen, GRAY, self.rect)
+        pygame.draw.rect(screen, self.color, self.rect)
         font = pygame.font.Font(None, 36)
         text_surface = font.render(self.text, True, BLACK)
         text_rect = text_surface.get_rect(center=self.rect.center)

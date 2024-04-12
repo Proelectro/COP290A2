@@ -28,3 +28,5 @@ def arcade(screen, background):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if rocket_button(pygame.mouse.get_pos()):
                     return STATE.ROCKET
+                elif brute_button(pygame.mouse.get_pos()):
+                    return STATE.BRUTEFORCE

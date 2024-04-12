@@ -8,7 +8,7 @@ from arcade import arcade
 from message import message
 from rocket import rocket
 from bruteforce import bruteforce
-
+from mcq import mcq
 
 pygame.init()
 
@@ -29,7 +29,7 @@ background_4 = pygame.image.load('images/background.jpg')
 if __name__ == "__main__":
     # state = STATE.START_SCREEN
     state = STATE.ROCKET
-    
+    mcq(screen, background_1, "What is the capital of France?", ["Paris", "London", "Berlin", "Madrid"], 0, "Paris is the capital of France.")
     while state:
         if state == STATE.START_SCREEN:
             state = start_screen(screen, background_1)
@@ -46,8 +46,11 @@ if __name__ == "__main__":
         elif state == STATE.ROCKET:
             state = message(screen, background_1, "Rocket Game", ["This is the rocket game", "It is a game where you have to dodge asteroids", "Good luck!"])
             if state == STATE.EXIT:
-                break
+                continue
             state = rocket(screen, background_1)
+            if state != -1:
+                continue
+            state = mcq(screen, background_1, "What is the capital of France?", ["Paris", "London", "Berlin", "Madrid"], 0, "Paris is the capital of France.")
         elif state == STATE.BRUTEFORCE:
             state = bruteforce(screen, background_1)            
             
