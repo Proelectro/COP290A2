@@ -28,7 +28,7 @@ background_4 = pygame.image.load('images/background.jpg')
 
 if __name__ == "__main__":
     # state = STATE.START_SCREEN
-    state = STATE.BRUTEFORCE
+    state = STATE.MAIN_MENU
     
     while state:
         if state == STATE.START_SCREEN:

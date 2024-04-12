@@ -4,15 +4,10 @@ import sys
 def arcade(screen, background):
     running = True
     
-    def rocket_game():
-        return
-    
-    def virus_game():
-        return
-    
-    rocket_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2, 200, 50, "Rocket Game", rocket_game)
-    virus_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 + 100, 200, 50, "Virus Game", virus_game)
-    
+    rocket_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2, 200, 50, "Rocket Game")
+    virus_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 + 100, 200, 50, "Virus Game")
+    brute_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 + 200, 200, 50, "Brute Force Game")
+
     while running:
         screen.blit(background, (0, 0))
         
@@ -20,7 +15,7 @@ def arcade(screen, background):
 
         rocket_button.draw(screen)
         virus_button.draw(screen)
-
+        brute_button.draw(screen)
 
         pygame.display.update()
 
