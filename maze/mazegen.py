@@ -87,6 +87,10 @@ class Maze:
                 grid[2 * x1 + 1][2 * min(y1, y2) + 2] = ' '
             else:
                 grid[2 * min(x1, x2) + 2][2 * y1 + 1] = ' '
+
+        grid[2 * self.start_x + 1][2 * self.start_y + 1] = 'S'
+        grid[2 * self.end_x + 1][2 * self.end_y + 1] = 'G'
+
         return grid
     
 if __name__ == "__main__":

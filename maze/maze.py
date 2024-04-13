@@ -17,21 +17,25 @@ WIDTH = 800
 HEIGHT = 800
 
 # Maze cell dimensions
-CELL_WIDTH = 30
-CELL_HEIGHT = 30
+CELL_WIDTH = 15
+CELL_HEIGHT = 15
 
 
 
 def find_start_goal(maze):
-    start = (2*maze.start_y + 1, 2*maze.start_x+ 1)
-    goal = (2*maze.end_y+1, 2*maze.end_x+1)
+    start = (2*maze.start_x + 1, 2*maze.start_y+ 1)
+    goal = (2*maze.end_x+1, 2*maze.end_y+1)
     return start, goal
 
 def draw_maze(screen, maze):
     for i in range(len(maze)):
         for j in range(len(maze[0])):
             if maze[i][j] == '#':
-                pygame.draw.rect(screen, BLUE, (j*CELL_WIDTH, i*CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT))
+                # pygame.draw.rect(screen, BLUE, (j*CELL_WIDTH, i*CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT))
+                # use the wall.png file
+                wall = pygame.image.load(os.path.join('maze', 'wall.png'))
+                wall = pygame.transform.scale(wall, (CELL_WIDTH, CELL_HEIGHT))
+                screen.blit(wall, (j*CELL_WIDTH, i*CELL_HEIGHT))
             elif maze[i][j] == 'S':
                 pygame.draw.rect(screen, GREEN, (j*CELL_WIDTH, i*CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT))
             elif maze[i][j] == 'G':
@@ -47,33 +51,14 @@ def move(position, direction):
     new_position = (position[0] + moves[direction][0], position[1] + moves[direction][1])
     return new_position
 
-# def show_maze(maze):
-#     pygame.init()
-#     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-#     pygame.display.set_caption("Maze Game")
-#     maze_hist = maze.history
-#     clock = pygame.time.Clock()
-#     running = True
-#     idx = 0
-#     while running:
-#         for event in pygame.event.get():
-#             if event.type == pygame.QUIT:
-#                 running = False
-#         screen.fill(BLACK)
-#         draw_maze(screen, maze_hist[idx])
-#         pygame.display.flip()  
-#         idx = (idx + 1) 
-#         clock.tick(30)  
-#         if idx == len(maze_hist):
-#             return
-
-
 
 def play_maze():
-    maze = Maze(10, 10)
+    maze = Maze(25, 25)
     maze.generate()
     start, goal = find_start_goal(maze)
     position = start
+    print(start)
+    print(goal)
 
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -102,7 +87,7 @@ def play_maze():
             draw_maze(screen, maze_hist[idx])
             pygame.display.flip()  
             idx = (idx + 1) 
-            clock.tick(30)
+            clock.tick(60)
 
         else:
         

@@ -55,3 +55,9 @@ save the kingdom.
 1. in maze game, add firewalls, different types of viruses, to educate about them. 
 2. in pass-word game, 
 3. rocket game : malware / websites / basic security principles 
+
+#TODO:
+1. incorporate maze game in main
+2. add music to the game
+3. ad sprites / colors / backgrounds in all the games
+4. Add control flow for the story mode . 
