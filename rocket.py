@@ -88,6 +88,7 @@ def rocket(screen, background):
     viruses = []
     
     while running and not game_over:
+        # print(len(viruses))
         screen.blit(background, (0, 0))
         
         player.draw(screen)
@@ -98,7 +99,7 @@ def rocket(screen, background):
             if bullet.y < 0:
                 bullet_active = False
         
-        if random.randint(0, 100 * 10 ** len(viruses)) == 0:
+        if random.randint(0, 1000) == 0:
             viruses.append(Virus(random.randint(0, SCREEN_WIDTH - 50), 0, 0.1))
         
         for virus in viruses:
@@ -113,10 +114,11 @@ def rocket(screen, background):
                     bullet_active = False
                     score += 1
                     if score >= 4:
-                        return -1
-                if virus.y > SCREEN_HEIGHT:
-                    viruses.remove(virus)
-                    bullet_active = False
+                        return STATE.MAIN_MENU, True
+                    continue
+            if virus.y > SCREEN_HEIGHT:
+                viruses.remove(virus)
+                bullet_active = False
         
         pygame.display.update()
         
@@ -124,7 +126,7 @@ def rocket(screen, background):
             
             if event.type == pygame.QUIT:
                 running = False
-                return 0
+                return STATE.EXIT, False
             
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
@@ -143,7 +145,7 @@ def rocket(screen, background):
             if event.type == pygame.QUIT:
                 running = False
                 game_over = False
-                return 0
+                return STATE.EXIT, False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    return STATE.MAIN_MENU
+                    return STATE.MAIN_MENU, False
