@@ -4,11 +4,8 @@ import time
 import random
 import subprocess
 import os
+from mazegen import Maze
 
-def run_cpp_file():
-    cpp_file = "mazegen.cpp"  # Replace this with the path to your C++ file
-    os.system("g++ -o mazegen " + cpp_file)
-    os.system("./mazegen")
 # Define colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -23,24 +20,16 @@ HEIGHT = 800
 CELL_WIDTH = 30
 CELL_HEIGHT = 30
 
-def load_maze(filename):
-    with open(filename, 'r') as f:
-        maze = [list(line.strip()) for line in f]
-    return maze
+
 
 def find_start_goal(maze):
-    start = goal = None
-    for i in range(len(maze)):
-        for j in range(len(maze[i])):
-            if maze[i][j] == 'S':
-                start = (i, j)
-            elif maze[i][j] == 'G':
-                goal = (i, j)
+    start = (2*maze.start_y + 1, 2*maze.start_x+ 1)
+    goal = (2*maze.end_y+1, 2*maze.end_x+1)
     return start, goal
 
 def draw_maze(screen, maze):
     for i in range(len(maze)):
-        for j in range(len(maze[i])):
+        for j in range(len(maze[0])):
             if maze[i][j] == '#':
                 pygame.draw.rect(screen, BLUE, (j*CELL_WIDTH, i*CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT))
             elif maze[i][j] == 'S':
@@ -58,34 +47,31 @@ def move(position, direction):
     new_position = (position[0] + moves[direction][0], position[1] + moves[direction][1])
     return new_position
 
-def show_maze(filename , n, m):
-    pygame.init()
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Maze Game")
-    f = open(filename, 'r')
-    maze_hist = [list(line.strip()) for line in f]
-    num_mazes = len(maze_hist) // (2*n + 1)
-    clock = pygame.time.Clock()
-    running = True
-    idx = 0
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-        screen.fill(BLACK)
-        maze = maze_hist[idx*(2*n + 1):(idx+1)*(2*n + 1)]
-        draw_maze(screen, maze)
-        pygame.display.flip()  
-        idx = (idx + 1) 
-        clock.tick(30)  
-        if idx == num_mazes:
-            return
+# def show_maze(maze):
+#     pygame.init()
+#     screen = pygame.display.set_mode((WIDTH, HEIGHT))
+#     pygame.display.set_caption("Maze Game")
+#     maze_hist = maze.history
+#     clock = pygame.time.Clock()
+#     running = True
+#     idx = 0
+#     while running:
+#         for event in pygame.event.get():
+#             if event.type == pygame.QUIT:
+#                 running = False
+#         screen.fill(BLACK)
+#         draw_maze(screen, maze_hist[idx])
+#         pygame.display.flip()  
+#         idx = (idx + 1) 
+#         clock.tick(30)  
+#         if idx == len(maze_hist):
+#             return
 
 
 
-def play_maze(filename):
-    run_cpp_file()
-    maze = load_maze(filename)
+def play_maze():
+    maze = Maze(10, 10)
+    maze.generate()
     start, goal = find_start_goal(maze)
     position = start
 
@@ -93,17 +79,12 @@ def play_maze(filename):
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Maze Game")
     clock = pygame.time.Clock()
-    n = 10
-    f = open("mazehist.txt", 'r')
-    maze_hist = [list(line.strip()) for line in f]
-    num_mazes = len(maze_hist) // (2*n + 1)
     idx = 0
-
+    maze_hist = maze.history
     start_time = time.time()
     elapsed_time = 0
 
     running = True
-    animation = True
     moving = False
     while running:
         for event in pygame.event.get():
@@ -116,10 +97,9 @@ def play_maze(filename):
                 if event.key in [pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT]:
                     moving = False  
 
-        if (idx < num_mazes):
+        if (idx < len(maze_hist)):
             screen.fill(BLACK)
-            maze = maze_hist[idx*(2*n + 1):(idx+1)*(2*n + 1)]
-            draw_maze(screen, maze)
+            draw_maze(screen, maze_hist[idx])
             pygame.display.flip()  
             idx = (idx + 1) 
             clock.tick(30)
@@ -127,7 +107,7 @@ def play_maze(filename):
         else:
         
             screen.fill(BLACK)
-            draw_maze(screen, maze)
+            draw_maze(screen, maze.maze)
             pygame.draw.rect(screen, WHITE, (position[1]*CELL_WIDTH, position[0]*CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT))
             
             if moving:
@@ -153,5 +133,4 @@ def play_maze(filename):
 
 
 if __name__ == "__main__":
-    filename = "maze.txt"  # Change this to your maze file
-    play_maze(filename)
+    play_maze()
