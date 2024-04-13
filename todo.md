@@ -49,3 +49,9 @@ Index Terms—Gamification, cybersecurity, vulnerabilities, educational, learnin
 from the invasion of the virus lord hackhound. But to be able to defeat him, you
 have to go on an adventure and master the weapons of cyber security to be able to 
 save the kingdom.
+
+## some more ideas : 
+
+1. in maze game, add firewalls, different types of viruses, to educate about them. 
+2. in pass-word game, 
+3. rocket game : malware / websites / basic security principles 

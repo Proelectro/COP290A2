@@ -40,48 +40,56 @@ def has_roman(s):
     romans = ["I", "V", "X", "L", "C", "D", "M"]
     return any(r in s for r in romans)
 
-def constraint(s):
-    constraints = [has_length, has_num, has_upper, has_special, has_add_25, has_month, has_roman]
-    messages = [
-        "your password must have atleat 5 characters",
-        "your password must have atleat 1 number",
-        "your password must have atleat 1 uppercase letter",
-        "your password must have atleat 1 special character",
-        "the sum of the digits in your password must be 25",
-        "your password must have a month",
-        "your password must have a roman numeral"
-    ]
 
-    num_constraints = len(constraints)
-
-    output = []
-
-    for i in range(num_constraints):
-        if not constraints[i](s):
-            output.append((messages[i], RED))
-            output = output[::-1]
-            return output
-        else:
-            output.append((messages[i], GREEN))
+class Constraint : 
+    def __init__(self, message , check_method):
+        self.message = message
+        self.check_method = check_method
+        self.satisfy = False
+        self.color = RED
     
-    return "Your password is strong"
+    def check(self, s):
+        self.satisfy = self.check_method(s)
+        if self.satisfy:
+            self.color = GREEN
+        else:
+            self.color = RED
+
+num_constraint = 7
+
+c = [None for i in range(num_constraint)]
+c[0] = Constraint("your password must have atleat 5 characters", has_length)
+c[1] = Constraint("your password must have atleat 1 number", has_num)
+c[2] = Constraint("your password must have atleat 1 uppercase letter", has_upper)
+c[3] = Constraint("your password must have atleat 1 special character", has_special)
+c[4] = Constraint("the sum of the digits in your password must be 25", has_add_25)
+c[5] = Constraint("your password must have a month", has_month)
+c[6] = Constraint("your password must have a roman numeral", has_roman)
+
 
 while True:
     screen.fill((225, 225, 225))
 
     events = pygame.event.get()
 
-    # Feed it with events every frame
     textinput.update(events)
-    # Blit its surface onto the screen
+    passwd = textinput.value
     screen.blit(textinput.surface, (10, 10))
-    contraints = constraint(textinput.value)
-    const_x = 10
-    const_y = 50
-    for containt in contraints:
-        feedback = textoutput.render(containt[0], True, containt[1])
-        screen.blit(feedback, (const_x, const_y) )
-        const_y += 30
+    message_pos_x = 10
+    message_pos_y = 50
+    display_constraints = []
+    for constraint in c:
+        constraint.check(passwd)
+        display_constraints.append(constraint)
+        if(not constraint.satisfy):
+            break
+
+    display_constraints = display_constraints[::-1]
+
+    for constraint in display_constraints:
+        feedback = textoutput.render(constraint.message, True, constraint.color)
+        screen.blit(feedback, (message_pos_x, message_pos_y) )
+        message_pos_y += 30
 
     for event in events:
         if event.type == pygame.QUIT:
