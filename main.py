@@ -27,9 +27,8 @@ background_4 = pygame.image.load('images/background.jpg')
 
 
 if __name__ == "__main__":
-    # state = STATE.START_SCREEN
-    state = STATE.ROCKET
-    mcq(screen, background_1, "What is the capital of France?", ["Paris", "London", "Berlin", "Madrid"], 0, "Paris is the capital of France.")
+    state = STATE.START_SCREEN
+    # state = STATE.ROCKET
     while state:
         if state == STATE.START_SCREEN:
             state = start_screen(screen, background_1)

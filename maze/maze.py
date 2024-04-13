@@ -3,11 +3,12 @@ import sys
 import time
 import random
 import subprocess
+import os
 
 def run_cpp_file():
     cpp_file = "mazegen.cpp"  # Replace this with the path to your C++ file
-    subprocess.run(["g++", cpp_file])  # Compile the C++ file
-    subprocess.run(["./a.out"])  # Run the compiled executable
+    os.system("g++ -o mazegen " + cpp_file)
+    os.system("./mazegen")
 # Define colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
