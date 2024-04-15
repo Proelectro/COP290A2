@@ -36,10 +36,10 @@ class Maze:
         self.dsu = DSU()
         self.edges = []
         self.maze = []
-        self.start_x = 0
-        self.start_y = 0
-        self.end_x = 0
-        self.end_y = 0
+        # self.start_x = 0
+        # self.start_y = 0
+        # self.end_x = 0
+        # self.end_y = 0
         self.history = []
         self.dsu.init(n * m)
         for i in range(n):
@@ -54,8 +54,8 @@ class Maze:
             j = random.randint(0, len(self.edges) - 1)
             self.edges[i], self.edges[j] = self.edges[j], self.edges[i]
 
-        self.end_x = random.randint(0, m - 1)
-        self.end_y = random.randint(0, n - 1)
+        # self.end_x = random.randint(0, n - 1)
+        # self.end_y = random.randint(0, m - 1)
 
     def __len__(self):
         return len(self.maze)
@@ -72,6 +72,7 @@ class Maze:
         return self.maze[idx]
 
     def get(self):
+
         grid = [['#' for j in range(2 * self.m + 1)] for i in range(2 * self.n + 1)]
         for i in range(self.n):
             for j in range(self.m):
@@ -87,9 +88,9 @@ class Maze:
                 grid[2 * x1 + 1][2 * min(y1, y2) + 2] = ' '
             else:
                 grid[2 * min(x1, x2) + 2][2 * y1 + 1] = ' '
-
-        grid[2 * self.start_x + 1][2 * self.start_y + 1] = 'S'
-        grid[2 * self.end_x + 1][2 * self.end_y + 1] = 'G'
+        # print(self.start_x, self.start_y, self.end_x, self.end_y)
+        # grid[2 * self.start_x + 1][2 * self.start_y + 1] = 'S'
+        # grid[2 * self.end_x + 1][2 * self.end_y + 1] = 'G'
 
         return grid
     

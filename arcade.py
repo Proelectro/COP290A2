@@ -4,10 +4,10 @@ import sys
 def arcade(screen, background):
     running = True
     
-    rocket_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2, 200, 80, "Rocket Game")
-    brute_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 + 70 * 1, 200, 80, "Brute Force Game")
-    password_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 + 70 * 2, 200, 80, "Password Game")
-    maze_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 + 70 * 3, 200, 80, "Maze Game")
+    rocket_button = Button(SCREEN_WIDTH // 2 - 125, SCREEN_HEIGHT // 2, 250, 60, "Rocket Game")
+    brute_button = Button(SCREEN_WIDTH // 2 - 125, SCREEN_HEIGHT // 2 + 70 * 1, 250, 60, "Brute Force Game")
+    password_button = Button(SCREEN_WIDTH // 2 - 125, SCREEN_HEIGHT // 2 + 70 * 2, 250, 60, "Password Game")
+    maze_button = Button(SCREEN_WIDTH // 2 - 125, SCREEN_HEIGHT // 2 + 70 * 3, 250, 60, "Maze Game")
 
     while running:
         screen.blit(background, (0, 0))

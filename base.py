@@ -2,14 +2,16 @@ import pygame
 
 class Button:
     def __init__(self, x, y, width, height, text, on_click = lambda: None):
-        self.rect = pygame.Rect(x, y, width, height)
+        self.rect = pygame.Rect(x, y, width, height )
         self.text = text
         self.on_click = on_click
-        self.color = GRAY
-        
+        self.color = WHITE
+        self.height = height
+        self.width = width
+
     def draw(self, screen):
-        pygame.draw.rect(screen, self.color, self.rect)
-        font = pygame.font.Font(None, 36)
+        pygame.draw.rect(screen, self.color, self.rect, border_radius=(self.height // 4))
+        font = pygame.font.Font(*OPTION_FONT)
         text_surface = font.render(self.text, True, BLACK)
         text_rect = text_surface.get_rect(center=self.rect.center)
         screen.blit(text_surface, text_rect)
@@ -45,12 +47,14 @@ class ScrollText:
         self.index += 1
         self.scroll_pos_x_speed = 0
         if self.index >= len(self.text_list):
+            self.index = len(self.text_list) - 1
             raise IndexError("End of text list")
             
     def prev(self):
         self.index -= 1
         self.scroll_pos_x_speed = 0
         if self.index < 0:
+            self.index = 0
             raise IndexError("Start of text list")
 
 def draw_text(screen, text, font, color, x, y):
@@ -84,5 +88,5 @@ RED = (120, 0, 0)
 BLUE = (0, 0, 255)
 
 # Fonts
-TITLE_FONT = (None, 60)
-OPTION_FONT = (None, 40)
+TITLE_FONT = ("nasalization-rg.otf", 60)
+OPTION_FONT = ("Pokemon_GB.ttf", 17)

@@ -15,7 +15,7 @@ class Player:
     def draw(self, screen):
         screen.blit(self.image, (self.x, self.y))
         self.hitbox = (self.x, self.y, self.width, self.height)
-        pygame.draw.rect(screen, (255, 0, 0), self.hitbox, 2)
+        # pygame.draw.rect(screen, (255, 0, 0), self.hitbox, 2)
 
     def move(self):
         keys = pygame.key.get_pressed()
@@ -44,7 +44,7 @@ class Virus:
         if self.alive:
             screen.blit(self.image, (self.x, self.y))
             self.hitbox = (self.x, self.y, self.width, self.height)
-            pygame.draw.rect(screen, (255, 0, 0), self.hitbox, 2)
+            # pygame.draw.rect(screen, (255, 0, 0), self.hitbox, 2)
 
     def move(self):
         self.y += self.vel
@@ -80,7 +80,7 @@ class Bullet:
     def move(self):
         self.y -= self.vel
 
-def rocket(screen, background):            
+def rocket(screen, background, arcade = True):            
     running = True
     
     player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT - 100)
@@ -94,6 +94,7 @@ def rocket(screen, background):
     bg_y = 0
 
     while running and not game_over:
+        # show the score on top right
         screen.blit(background, (0, bg_y))
         screen.blit(background, (0, bg_y - SCREEN_HEIGHT))
         
@@ -103,6 +104,7 @@ def rocket(screen, background):
             bg_y = 0
         
         player.draw(screen)
+        draw_text(screen, f"Score: {score}", pygame.font.Font(*OPTION_FONT), WHITE, 60, 20)
         
         if bullet_active:
             bullet.draw(screen)
@@ -124,7 +126,7 @@ def rocket(screen, background):
                     viruses.remove(virus)
                     bullet_active = False
                     score += 1
-                    if score >= 4:
+                    if score >= 4 and not arcade:
                         return STATE.MAIN_MENU, True
                     continue
             if virus.y > SCREEN_HEIGHT:
@@ -138,16 +140,16 @@ def rocket(screen, background):
                 running = False
                 return STATE.EXIT, False
             
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    if not bullet_active:
-                        bullet = Bullet(player.x + player.width // 2, player.y, 1)
-                        bullet_active = True
+            elif (event.type == pygame.MOUSEBUTTONDOWN and event.button == 1) or (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE):
+                if not bullet_active:
+                    bullet = Bullet(player.x + player.width // 2, player.y, 1)
+                    bullet_active = True
         player.move()
         
     while game_over:
         screen.blit(background, (0, 0))
-        draw_text(screen, "Game Over", pygame.font.Font(*TITLE_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+        draw_text(screen, "Game Over", pygame.font.Font(*TITLE_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50)
+        draw_text(screen, f"Your Score Was : {score}", pygame.font.Font(*TITLE_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 )
         draw_text(screen, "Click to return to the main menu", pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
         pygame.display.update()
         

@@ -46,7 +46,7 @@ if __name__ == "__main__":
             state = arcade(screen, background_4)
         
         elif state == STATE.ROCKET:
-            state, win = rocket(screen, background_1)
+            state, win = rocket(screen, background_1, True)
 
         elif state == STATE.BRUTEFORCE:
             state = bruteforce(screen, background_1)            
