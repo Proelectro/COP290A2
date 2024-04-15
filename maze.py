@@ -1,20 +1,9 @@
-import pygame
 import sys
 import time
-import random
-import subprocess
-import os
+from base import *
 from mazegen import Maze
+import os
 
-# Define colors
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
-
-# Set up display dimensions
-WIDTH = 800
-HEIGHT = 800
 
 # Maze cell dimensions
 CELL_WIDTH = 30
@@ -52,16 +41,11 @@ def move(position, direction):
     return new_position
 
 
-def play_maze():
+def maze(screen):
     maze = Maze(10, 10)
     maze.generate()
     start, goal = find_start_goal(maze)
     position = start
-    print(start)
-    print(goal)
-
-    pygame.init()
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Maze Game")
     clock = pygame.time.Clock()
     idx = 0
@@ -71,10 +55,20 @@ def play_maze():
 
     running = True
     moving = False
+
+    reached = False
+
     while running:
+        screen.fill(BLUE)
+
         for event in pygame.event.get():
+            
             if event.type == pygame.QUIT:
                 running = False
+                return STATE.EXIT
+            if event.type == pygame.MOUSEBUTTONDOWN and reached:
+                return STATE.MAIN_MENU
+                
             elif event.type == pygame.KEYDOWN:
                 if event.key in [pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT]:
                     moving = True  
@@ -95,7 +89,7 @@ def play_maze():
             draw_maze(screen, maze.maze)
             pygame.draw.rect(screen, WHITE, (position[1]*CELL_WIDTH, position[0]*CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT))
             
-            if moving:
+            if moving and not reached:
                 new_position = move(position, event.key)
                 if (0 <= new_position[0] < len(maze)) and (0 <= new_position[1] < len(maze[0])) and maze[new_position[0]][new_position[1]] != '#':
                     position = new_position
@@ -103,19 +97,13 @@ def play_maze():
                         elapsed_time = time.time() - start_time
 
             if position == goal:
-                font = pygame.font.SysFont(None, 48)
-                text = font.render("Congratulations! You reached the goal.", True, WHITE)
-                screen.blit(text, ((WIDTH - text.get_width()) // 2, (HEIGHT - text.get_height()) // 2))
-                text = font.render("Time taken: {:.2f} seconds".format(elapsed_time), True, WHITE)
-                screen.blit(text, ((WIDTH - text.get_width()) // 2, (HEIGHT - text.get_height()) // 2 + 50))
+                reached = True
+                
+        
+        if reached:
+            draw_text(screen, "Congratulations! You reached the goal.", pygame.font.Font(*TITLE_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+            draw_text(screen, "Time taken: {:.2f} seconds".format(elapsed_time), pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
+            draw_text(screen, "Click anywhere to exit", pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 100)
+        pygame.display.flip()
 
-            pygame.display.flip()
-            # clock.tick(20)
-
-    pygame.quit()
-    sys.exit()
-
-
-
-if __name__ == "__main__":
-    play_maze()
+    return STATE.EXIT

@@ -35,4 +35,4 @@ def arcade(screen, background):
                 elif password_button(pygame.mouse.get_pos()):
                     return STATE.PASSWORD
                 elif maze_button(pygame.mouse.get_pos()):
-                    return STATE.MAIN_MENU
+                    return STATE.MAZE

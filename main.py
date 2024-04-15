@@ -10,7 +10,7 @@ from rocket import rocket
 from bruteforce import bruteforce
 from mcq import mcq
 from password import password
-
+from maze import maze
 
 pygame.init()
 
@@ -29,8 +29,8 @@ background_4 = pygame.image.load('images/background.jpg')
 
 
 if __name__ == "__main__":
-    # state = STATE.START_SCREEN
-    state = STATE.ROCKET
+    state = STATE.START_SCREEN
+    # state = STATE.ROCKET
     
     while state:
         if state == STATE.START_SCREEN:
@@ -54,6 +54,9 @@ if __name__ == "__main__":
         elif state == STATE.PASSWORD:
             state = password(screen, background_2)
             
+        elif state == STATE.MAZE:
+            state = maze(screen)
+
         else:
             print("Invalid state", state)
             break
