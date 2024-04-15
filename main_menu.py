@@ -34,5 +34,6 @@ def main_menu(screen, background):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if arcade_button(pygame.mouse.get_pos()):
                     return STATE.ARCADE
-    
+                elif story_button(pygame.mouse.get_pos()):
+                    return STATE.STORY
     return 0

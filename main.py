@@ -56,6 +56,76 @@ if __name__ == "__main__":
             
         elif state == STATE.MAZE:
             state = maze(screen)
+            
+        elif state == STATE.STORY:
+            try:
+                assert message(screen, background_1, "Story Mode" , ["You will learn about important cyber security concepts in this game."])
+                assert message(screen, background_1,"Passwords", ["Do you know why our passwords should be strong?"])
+                assert bruteforce(screen, background_1)
+                assert message(screen, background_1, "Strong Passwords",
+                               ["This was a brute force attack.",
+                                "It is a trial and error method used by hackers to decode encrypted data.", 
+                                "To prevent this, we should use strong passwords.",
+                                "Let us learn how strong passwards can be created."
+                                ])
+                assert password(screen, background_2)
+                assert message(screen, background_1, "Internet Ethics",
+                               [
+                                   "Congratulations! You have created a strong password.",
+                                   "Now lets see some interesting facts about cyber security and internet ethics.",
+                               ])
+                win = False
+                while not win:
+                    state, win = rocket(screen, background_1)
+                    assert state
+                
+                assert mcq(screen, background_1,
+                           "What is the full form of URL?",
+                            ["Uniform Reasearch Locator",
+                            "Uniform Resource Link",
+                            "Uniform Resource Locator",
+                            ],2,"Uniform Resource Locator")
+                win = False
+                while not win:
+                    state, win = rocket(screen, background_1)
+                    assert state
+                
+                assert mcq(screen, background_1,
+                           "Your parents use the same password for all their accounts. Is it safe?",
+                            ["Yes",
+                            "No",
+                            ],1,
+                            "Each password should be unique and strong to prevent hacking."
+                            )
+                win = False
+                while not win:
+                    state, win = rocket(screen, background_1)
+                    assert state
+                
+                assert mcq(screen, background_1,
+                           "You got a popup on a website saving you 100$. All you have to do is to fill out a form. What will you do?",
+                           ["Fill the form",
+                            "Ignore the popup",
+                            ],1, "It is a scam to get your personal information."
+                            )
+            
+                assert message(screen, background_1, "Internet Ethics",
+                               [
+                                "You have learned about cyber security concepts and internet ethics.",
+                                "Stay safe online.",
+                                
+                                ])   
+
+                assert message(screen, background_1, "Viruses and Fire Wall",
+                               ["Your computer was attacked by many viruses but your firewall has traped them."
+                                ,"Now you need to defeat them to win the game."
+                                ])
+                assert maze(screen)
+                assert message(screen, background_1, "Congratulations",
+                               ["Congratulations! You have won the game."])
+                state = STATE.MAIN_MENU
+            except AssertionError:
+                break
 
         else:
             print("Invalid state", state)
