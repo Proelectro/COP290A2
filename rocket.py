@@ -80,7 +80,7 @@ class Bullet:
     def move(self):
         self.y -= self.vel
 
-def rocket(screen, background, arcade = True):            
+def rocket(screen, background, arcade = False):            
     running = True
     
     player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT - 100)
