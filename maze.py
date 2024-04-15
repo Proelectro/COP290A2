@@ -22,7 +22,7 @@ def draw_maze(screen, maze):
             if maze[i][j] == '#':
                 # pygame.draw.rect(screen, BLUE, (j*CELL_WIDTH, i*CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT))
                 # use the wall.png file
-                wall = pygame.image.load(os.path.join('maze', 'wall.png'))
+                wall = pygame.image.load(os.path.join('images', 'wall.png'))
                 wall = pygame.transform.scale(wall, (CELL_WIDTH, CELL_HEIGHT))
                 screen.blit(wall, (j*CELL_WIDTH, i*CELL_HEIGHT))
             elif maze[i][j] == 'S':
