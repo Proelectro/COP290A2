@@ -2,25 +2,38 @@ from base import *
 import random
 
 class Player:
-    image = pygame.image.load('images/rocket.png')
+    images = [pygame.image.load("images/rocket_up.png"),
+                pygame.image.load("images/rocket_right.png"),
+                pygame.image.load("images/rocket_down.png"),
+                pygame.image.load("images/rocket_left.png")]
+    
     
     def __init__(self, x, y):
+        """
+        0 : up
+        1 : right
+        2 : down
+        3 : left    
+        """
+
         self.x = x
         self.y = y
         self.width = 50
         self.height = 50
         self.vel = 0.2
         self.hitbox = (self.x, self.y, self.width, self.height)
+        self.direction = 0
 
     def draw(self, screen):
-        screen.blit(self.image, (self.x, self.y))
+        screen.blit(self.images[self.direction], (self.x, self.y))
         self.hitbox = (self.x, self.y, self.width, self.height)
-        # pygame.draw.rect(screen, (255, 0, 0), self.hitbox, 2)
+        pygame.draw.rect(screen, (255, 0, 0), self.hitbox, 2)
 
     def move(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             self.x -= self.vel
+            
         if keys[pygame.K_RIGHT]:
             self.x += self.vel
         if keys[pygame.K_UP]:
@@ -28,6 +41,25 @@ class Player:
         if keys[pygame.K_DOWN]:
             self.y += self.vel
 
+
+
+        if keys[pygame.K_LEFT]:
+            self.direction = 3
+        if keys[pygame.K_RIGHT]:
+            self.direction = 1
+        if keys[pygame.K_UP]:
+            self.direction = 0
+        if keys[pygame.K_DOWN]:
+            self.direction = 2
+
+        # if keys[pygame.K_a]:
+        #     self.direction = 3
+        # if keys[pygame.K_d]:
+        #     self.direction = 1
+        # if keys[pygame.K_w]:
+        #     self.direction = 0
+        # if keys[pygame.K_s]:
+        #     self.direction = 2
 class Virus:
     image = pygame.image.load('images/virus.jpeg')
     
@@ -65,20 +97,28 @@ class Virus:
     
 class Bullet:
     
-    def __init__(self, x, y, vel):
+    def __init__(self, x, y, vel, dir):
         self.x = x
         self.y = y
         self.width = 10
         self.height = 10
         self.vel = vel
         self.hitbox = (self.x, self.y, self.width, self.height)
+        self.direction = dir
 
     def draw(self, screen):
         pygame.draw.rect(screen, (255, 0, 0), (self.x, self.y, self.width, self.height))
         self.hitbox = (self.x, self.y, self.width, self.height)        
     
     def move(self):
-        self.y -= self.vel
+        if self.direction == 0:
+            self.y -= self.vel
+        elif self.direction == 1:
+            self.x += self.vel
+        elif self.direction == 2:
+            self.y += self.vel
+        elif self.direction == 3:
+            self.x -= self.vel
 
 def rocket(screen, background, arcade = False):            
     running = True
@@ -112,7 +152,7 @@ def rocket(screen, background, arcade = False):
             if bullet.y < 0:
                 bullet_active = False
         
-        if random.randint(0, 1000) == 0:
+        if random.randint(0, 1000 * len(viruses) ** 2) == 0:
             viruses.append(Virus(random.randint(0, SCREEN_WIDTH - 50), 0, 0.1))
         
         for virus in viruses:
@@ -122,6 +162,9 @@ def rocket(screen, background, arcade = False):
                 game_over = True
                 break
             if bullet_active:
+                if bullet.x < 0 or bullet.x > SCREEN_WIDTH or bullet.y < 0 or bullet.y > SCREEN_HEIGHT:
+                    bullet_active = False
+                    continue
                 if virus.check_collision_bullet(bullet):
                     viruses.remove(virus)
                     bullet_active = False
@@ -129,9 +172,10 @@ def rocket(screen, background, arcade = False):
                     if score >= 4 and not arcade:
                         return STATE.MAIN_MENU, True
                     continue
+
             if virus.y > SCREEN_HEIGHT:
                 viruses.remove(virus)
-                bullet_active = False
+                score -= 1
         
         pygame.display.update()
         
@@ -144,7 +188,7 @@ def rocket(screen, background, arcade = False):
                     raise Escape("Escape")
             if (event.type == pygame.MOUSEBUTTONDOWN and event.button == 1) or (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE):
                 if not bullet_active:
-                    bullet = Bullet(player.x + player.width // 2, player.y, 1)
+                    bullet = Bullet(player.x + player.width // 2, player.y, 1, player.direction)
                     bullet_active = True
         player.move()
         
