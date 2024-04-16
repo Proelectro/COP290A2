@@ -31,9 +31,24 @@ class Base:
             pygame.draw.rect(screen, self.color, (MARGIN + self.pos[1] * CELL_WIDTH, MARGIN + self.pos[0] * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT))
 
 class Person(Base):
+
+    images = [pygame.transform.scale(pygame.image.load("images/rocket_up.png") , (CELL_WIDTH, CELL_HEIGHT)),
+                pygame.transform.scale(pygame.image.load("images/rocket_down.png"), (CELL_WIDTH, CELL_HEIGHT)),
+                pygame.transform.scale(pygame.image.load("images/rocket_left.png"), (CELL_WIDTH, CELL_HEIGHT)),
+                pygame.transform.scale(pygame.image.load("images/rocket_right.png"), (CELL_WIDTH, CELL_HEIGHT))]
+    
+
+
     def __init__(self, x, y, color):
         super().__init__(x, y, color)
         self.moving = False
+        self.direction = 0
+        self.speed = 6
+
+    def draw(self, screen):
+        self.count += 1
+        screen.blit(self.images[self.direction], (self.pos[1]*CELL_WIDTH + MARGIN, self.pos[0]*CELL_HEIGHT + MARGIN))
+
 
     def move(self, n, m, maze):
         if self.moving and self.count % self.speed == 0:
@@ -47,7 +62,7 @@ class Virus(Base):
     def __init__(self, x, y, color):
         super().__init__(x, y, color)
         self.prev = (0, 1)
-        self.speed = 2
+        self.speed = 200
     def get_closest_player(self, players):
         min_dist = float('inf')
         closest = None
@@ -159,6 +174,8 @@ def maze(screen, popup_background, arcade = False):
                     raise Escape("Escape")
                 if event.key in [pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT]:
                     player.moving = moves[event.key]
+                    player.direction = list(moves.keys()).index(event.key)
+    
             elif event.type == pygame.KEYUP:
                 if event.key in [pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT]:
                     player.moving = False

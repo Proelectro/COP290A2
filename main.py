@@ -30,7 +30,7 @@ background_4 = pygame.image.load('images/background.jpg')
 
 if __name__ == "__main__":
     # state = STATE.START_SCREEN
-    state = STATE.ROCKET
+    state = STATE.MAZE
     
     while state:
         try:
