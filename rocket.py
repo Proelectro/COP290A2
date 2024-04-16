@@ -139,8 +139,10 @@ def rocket(screen, background, arcade = False):
             if event.type == pygame.QUIT:
                 running = False
                 return STATE.EXIT, False
-            
-            elif (event.type == pygame.MOUSEBUTTONDOWN and event.button == 1) or (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE):
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    raise Escape("Escape")
+            if (event.type == pygame.MOUSEBUTTONDOWN and event.button == 1) or (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE):
                 if not bullet_active:
                     bullet = Bullet(player.x + player.width // 2, player.y, 1)
                     bullet_active = True
@@ -158,6 +160,9 @@ def rocket(screen, background, arcade = False):
                 running = False
                 game_over = False
                 return STATE.EXIT, False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    raise Escape("Escape")
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     return STATE.MAIN_MENU, False

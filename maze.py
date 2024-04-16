@@ -9,6 +9,9 @@ CELL_WIDTH = 30
 CELL_HEIGHT = 30
 MARGIN = 20
 
+def sign(x):
+    return -1 if x < 0 else 1
+
 class Base:
     def __init__(self, x, y, color):
         self.x = x
@@ -16,7 +19,7 @@ class Base:
         self.color = color
         self.exist = True
         self.pos = (2 * x + 1, 2 * y + 1)
-        self.speed = 10
+        self.speed = 1
         self.count = 0
 
     def __eq__(self, __value: object) -> bool:
@@ -44,17 +47,41 @@ class Virus(Base):
     def __init__(self, x, y, color):
         super().__init__(x, y, color)
         self.prev = (0, 1)
-    def move(self, n, m, maze):
+        self.speed = 2
+    def get_closest_player(self, players):
+        min_dist = float('inf')
+        closest = None
+        for player in players:
+            dist = (self.pos[0] - player.pos[0]) ** 2 + (self.pos[1] - player.pos[1]) ** 2
+            if dist < min_dist:
+                min_dist = dist
+                closest = player
+        return closest
+        
+    def move(self, n, m, maze, players):
         moved = False
+        closest_player = self.get_closest_player(players)
+        x_diff = closest_player.pos[0] - self.pos[0]
+        y_diff = closest_player.pos[1] - self.pos[1]
+        high = [(-sign(x_diff), 0), (0, -sign(y_diff))]
+        low = [(0, sign(y_diff)), (sign(x_diff), 0)]
         if self.count % self.speed == 0:
             flag = False
             while not moved:
-                if flag or random.randint(0, 10) == 0:
-                    direction = random.choice([(0, 1), (0, -1), (1, 0), (-1, 0)])
-                else:
+                rnd = random.randint(0, 50)
+                if flag or  rnd < 45:
+                    direction = random.choices(high + low, weights=[30, 30, 1, 1])[0]
+                    new_pos = (self.pos[0] + direction[0], self.pos[1] + direction[1])
+                elif rnd < 48:
                     direction = self.prev
                     flag = True
-                new_pos = (self.pos[0] + direction[0], self.pos[1] + direction[1])
+                    new_pos = (self.pos[0] + direction[0], self.pos[1] + direction[1])
+                else:
+                    self.x = random.randint(0, n - 1)
+                    self.y = random.randint(0, m - 1)
+                    new_pos = 2 * self.x + 1, 2 * self.y + 1
+                    direction = (0, 1)
+                    
                 if 0 <= new_pos[0] < 2 * n + 1 and 0 <= new_pos[1] < 2 * m + 1 and maze[new_pos[0]][new_pos[1]] != '#':
                     self.pos = new_pos
                     self.x = (self.pos[0] - 1) // 2
@@ -76,8 +103,29 @@ def draw_maze(screen, maze):
                 wall = pygame.transform.scale(wall, (CELL_WIDTH, CELL_HEIGHT))
                 screen.blit(wall, (MARGIN + j*CELL_WIDTH, MARGIN + i*CELL_HEIGHT))
 
+def popup(screen, background,  text):
+    running = True
+    
+    while running:
+        screen.blit(background, (0, 0))
+        
+        draw_text(screen, text, pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+        draw_text(screen, "Click anywhere to continue...", pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
+        pygame.display.update()
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                return STATE.EXIT
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    raise Escape("Escape")
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                running = False
+    return 1
 
-def maze(screen):
+
+def maze(screen, popup_background, arcade = False):
     maze = Maze(8, 12)
     maze.generate()
     pygame.display.set_caption("Maze Game")
@@ -105,10 +153,10 @@ def maze(screen):
             if event.type == pygame.QUIT:
                 running = False
                 return STATE.EXIT
-            # if event.type == pygame.MOUSEBUTTONDOWN and reached:
-            #     return STATE.MAIN_MENU
                 
             elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    raise Escape("Escape")
                 if event.key in [pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT]:
                     player.moving = moves[event.key]
             elif event.type == pygame.KEYUP:
@@ -131,13 +179,17 @@ def maze(screen):
             virus_2.draw(screen)
 
             player.move(maze.n, maze.m, maze.maze)
-            virus_1.move(maze.n, maze.m, maze.maze)
-            virus_2.move(maze.n, maze.m, maze.maze)
+            virus_1.move(maze.n, maze.m, maze.maze, [player])
+            virus_2.move(maze.n, maze.m, maze.maze, [player])
 
-            if player == virus_1:
+            if player == virus_1 and virus_1.exist:
                 virus_1.exist = False
-            if player == virus_2:
-                virus_2.exist = False                
+                if not arcade:
+                    assert popup(screen, popup_background, "You have been caught by the virus!")
+            if player == virus_2 and virus_2.exist:
+                virus_2.exist = False
+                if not arcade:
+                    assert popup(screen, popup_background, "You have been caught by the virus!")                
         
         pygame.display.flip()
 

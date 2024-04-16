@@ -71,7 +71,10 @@ def password(screen, background):
         for event in events:
             if event.type == pygame.QUIT:
                 return STATE.EXIT
+
             elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    raise Escape("Escape")
                 if vaild:
                     return STATE.MAIN_MENU
 

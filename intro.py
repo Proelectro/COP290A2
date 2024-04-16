@@ -36,7 +36,8 @@ def intro(screen, background):
                 running = False
                 return STATE.EXIT
             elif event.type == pygame.KEYDOWN:
-                pass
+                if event.key == pygame.K_ESCAPE:
+                    raise Escape("Escape")
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 
                 try:

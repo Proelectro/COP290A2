@@ -63,6 +63,8 @@ def draw_text(screen, text, font, color, x, y):
     screen.blit(text_surface, text_rect)
 
 
+class Escape(Exception):
+    pass
 class STATE:
     EXIT = 0
     START_SCREEN = 1
@@ -89,4 +91,4 @@ BLUE = (0, 0, 255)
 
 # Fonts
 TITLE_FONT = ("nasalization-rg.otf", 60)
-OPTION_FONT = ("Pokemon_GB.ttf", 17)
+OPTION_FONT = ("nasalization-rg.otf", 17)

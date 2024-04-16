@@ -29,7 +29,9 @@ def mcq(screen, background, question, options, correct_answer, explanation):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    raise Escape("Escape")
                 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if answered:

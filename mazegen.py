@@ -67,6 +67,10 @@ class Maze:
                 self.maze.append((u, v))
                 self.history.append(self.get())
         self.maze = self.history[-1]
+        # for _ in range(15):
+        #     x = random.randint(1, self.n - 2)
+        #     y = random.randint(1, self.m - 2)
+        #     self.maze[2 * x][2 * y] = ' '
         
     def __getitem__(self, idx):
         return self.maze[idx]
