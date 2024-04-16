@@ -18,6 +18,7 @@
 
 6. [Maze Genrator ALgorithm](https://courses.cs.washington.edu/courses/cse326/08sp/lectures/18-disjoint-union-find.pdf)
 
+7. [Virus Sprites](https://images.app.goo.gl/eZMAg3oT9u9Gs7GH8)
 
 In most countries, a large percentage of children
 between the ages of eight and thirteen have access to a mobile
