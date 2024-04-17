@@ -74,6 +74,12 @@ class Virus:
     ,pygame.transform.scale(pygame.image.load('images/virus2.png'),(50,50))
     ,pygame.transform.scale(pygame.image.load('images/virus1.png'),(50,50))
     ,pygame.transform.scale(pygame.image.load('images/virus3.png'),(50,50))]
+
+    destroyed_images = [pygame.transform.scale(pygame.image.load('images/rocket_up.png'),(50,50))
+    ,pygame.transform.scale(pygame.image.load('images/rocket_right.png'),(50,50))   
+    ,pygame.transform.scale(pygame.image.load('images/rocket_down.png'),(50,50))
+    ,pygame.transform.scale(pygame.image.load('images/rocket_left.png'),(50,50))]
+
     
     def __init__(self, x, y, vel):
         self.x = x
@@ -86,6 +92,8 @@ class Virus:
         self.image_index = 0
         self.image_period = 100
         self.count = 0
+        self.dying_period = 100
+        self.dying_count = 0
         
     def draw(self, screen):
         if self.alive:
@@ -94,6 +102,14 @@ class Virus:
             self.count  = (self.count + 1) % self.image_period
             if self.count == 0:
                 self.image_index = (self.image_index + 1) % len(self.images)
+
+    def draw_destroyed(self, screen):
+        if not self.alive and self.dying_count < self.dying_period:
+            screen.blit(self.destroyed_images[self.image_index], (self.x, self.y))
+            self.count  = (self.count + 1) % self.image_period
+            if self.count == 0:
+                self.image_index = (self.image_index + 1) % len(self.images)
+            self.dying_count  += 1
             
             # pygame.draw.rect(screen, (255, 0, 0), self.hitbox, 2)
 
@@ -148,6 +164,7 @@ def rocket(screen, background, arcade = False):
     bullet_active = False
     game_over = False
     viruses = []
+    dying_viruses = []
     
     # Initialize background position
     bg_y = 0
@@ -186,11 +203,16 @@ def rocket(screen, background, arcade = False):
                     continue
                 if virus.check_collision_bullet(bullet):
                     viruses.remove(virus)
+                    virus.alive = False
+                    dying_viruses.append(virus)
                     bullet_active = False
                     score += 1
                     if score >= 4 and not arcade:
                         return STATE.MAIN_MENU, True
                     continue
+
+        for virus in dying_viruses:
+            virus.draw_destroyed(screen)
 
             if virus.y > SCREEN_HEIGHT:
                 viruses.remove(virus)
