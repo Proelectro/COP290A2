@@ -10,10 +10,10 @@ def intro(screen, background):
                 "and master the weapons of cyber security to be able to save the kingdom."]
     
     timer = pygame.time.Clock()
-    intro_text = ScrollText(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH - 100, 50,
+    intro_text = ScrollText(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50, SCREEN_WIDTH - 100, 50,
                             messages, pygame.font.Font(*OPTION_FONT), WHITE, 3)
-    next_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 + 100, 200, 50, "Next", intro_text.next)
-    prev_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 + 200, 200, 50, "Previous", intro_text.prev)
+    next_button = Button(SCREEN_WIDTH // 2 + 100, SCREEN_HEIGHT // 2 + 200, 200, 50, "Next", intro_text.next)
+    prev_button = Button(SCREEN_WIDTH // 2 - 300, SCREEN_HEIGHT // 2 + 200, 200, 50, "Previous", intro_text.prev)
     
     while running:
         screen.blit(background, (0, 0))

@@ -41,9 +41,25 @@ class ScrollText:
         if self.scroll_pos_x_speed < len(self.text_list[self.index]) * self.scroll_speed:
             self.scroll_pos_x_speed += 1    
     
+    def split_text(self, text):
+        max_char = 50
+        words = text.split()
+        lines = [""]
+        for word in words:
+            if len(lines[-1]) + len(word) + 1 <= max_char:
+                lines[-1] += " " + word
+            else:
+                lines.append(word)
+        
+        return lines        
+    
     def draw(self, screen):
-        draw_text(screen, self.text_list[self.index][:self.scroll_pos_x_speed//self.scroll_speed], 
-                  self.font, self.color, self.x, self.y)
+        text = self.text_list[self.index][:self.scroll_pos_x_speed//self.scroll_speed]
+        text_list = self.split_text(text)
+        y = self.y
+        for txt in text_list:
+            draw_text(screen, txt, self.font, self.color, self.x, y)
+            y += self.height
     
     def next(self):
         self.index += 1
@@ -58,6 +74,11 @@ class ScrollText:
         if self.index < 0:
             self.index = 0
             raise IndexError("Start of text list")
+        
+def draw_nav_bar(screen, title):
+    pygame.draw.rect(screen, CYAN, (0, 0, SCREEN_WIDTH, 80))
+    pygame.draw.rect(screen, WHITE, (0, 0, SCREEN_WIDTH, 80), 5)
+    draw_text(screen, title, pygame.font.Font(*TITLE_FONT), WHITE, SCREEN_WIDTH // 2, 40)
 
 def draw_text(screen, text, font, color, x, y):
     text_surface = font.render(text, True, color)
@@ -79,8 +100,8 @@ class STATE:
     MAZE = 8
     STORY = 9
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 550
+SCREEN_WIDTH = 900
+SCREEN_HEIGHT = 650
 TICK_SPEED = 60
 
 # Colors
@@ -88,9 +109,11 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GREEN = (0, 255, 0)
 GRAY = (169, 169, 169)
-RED = (120, 0, 0)
+RED = (255, 0, 0)
 BLUE = (0, 0, 255)
+CYAN = (0, 128, 128)
+YELLOW = (255, 255, 0)
 
 # Fonts
 TITLE_FONT = ("nasalization-rg.otf", 60)
-OPTION_FONT = ("nasalization-rg.otf", 17)
+OPTION_FONT = ("nasalization-rg.otf", 25)

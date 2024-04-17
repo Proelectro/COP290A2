@@ -8,8 +8,9 @@ def message(screen, background, title, text_list):
     timer = pygame.time.Clock()
     msg_text = ScrollText(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH - 100, 50,
                             text_list, pygame.font.Font(*OPTION_FONT), WHITE, 3)
-    next_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 + 100, 200, 50, "Next", msg_text.next)
-    prev_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 + 200, 200, 50, "Previous", msg_text.prev)
+    
+    next_button = Button(SCREEN_WIDTH // 2 + 100, SCREEN_HEIGHT // 2 + 200, 200, 50, "Next", msg_text.next)
+    prev_button = Button(SCREEN_WIDTH // 2 - 300, SCREEN_HEIGHT // 2 + 200, 200, 50, "Previous", msg_text.prev)
     
     while running:
         screen.blit(background, (0, 0))

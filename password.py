@@ -1,4 +1,5 @@
 from base import *
+import string
 import sys
 import pygame_textinput
 
@@ -47,7 +48,8 @@ class Constraint :
             self.color = RED
 
 def password(screen, background):
-    textinput = pygame_textinput.TextInputVisualizer(font_object=pygame.font.Font(*OPTION_FONT))
+    # textinput = pygame_textinput.TextInputVisualizer(font_object=pygame.font.Font(*OPTION_FONT), font_color=BLACK)
+    # textinput.cursor_color = BLACK
     clock = pygame.time.Clock()
     c = [None] * 7
     c[0] = Constraint("1). Your password must have atleat 5 characters", has_length)
@@ -60,28 +62,18 @@ def password(screen, background):
 
     running = True
     vaild = False
-
+    password_box = pygame.Rect(150, 110, 600, 50)
+    passwd = ""
+    cursor = True
+    loop = 0
+    cursor_pos = 0
+    
     while running:
-
         screen.blit(background, (0, 0))
-        events = pygame.event.get()
-
-        textinput.update(events)
-        
-        for event in events:
-            if event.type == pygame.QUIT:
-                return STATE.EXIT
-
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    raise Escape("Escape")
-                if vaild:
-                    return STATE.MAIN_MENU
-
-        passwd = textinput.value
-        screen.blit(textinput.surface, (200, 50))
-        # message_pos_x = 10
-        message_pos_y = 100
+        draw_nav_bar(screen, "Strong Password")
+        pygame.draw.rect(screen, WHITE, password_box, border_radius=10)
+        draw_text(screen, passwd[:cursor_pos] + [" ", "|"][cursor] + passwd[cursor_pos:], pygame.font.Font(*OPTION_FONT), BLACK, 450, 135)
+        message_pos_y = 200
         display_constraints = []
         for constraint in c:
             constraint.check(passwd)
@@ -95,13 +87,43 @@ def password(screen, background):
         display_constraints = display_constraints[::-1]
 
         if vaild:
-            draw_text(screen, "Password is vaild", pygame.font.Font(*OPTION_FONT), GREEN, SCREEN_WIDTH // 2, message_pos_y)
-            draw_text(screen, "Press any key to exit", pygame.font.Font(*OPTION_FONT), BLACK, SCREEN_WIDTH // 2, message_pos_y + 60)
+            draw_text(screen, "Password is vaild", pygame.font.Font(*OPTION_FONT), GREEN, SCREEN_WIDTH // 2, message_pos_y + 200)
+            draw_text(screen, "Click Anywhere to Continue....", pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, message_pos_y + 260)
         else:
             for constraint in display_constraints:
                 draw_text(screen, constraint.message, pygame.font.Font(*OPTION_FONT), constraint.color, SCREEN_WIDTH // 2, message_pos_y)
                 message_pos_y += 60
 
-        
+
+        events = pygame.event.get()
+        for event in events:
+            if event.type == pygame.QUIT:
+                return STATE.EXIT
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if vaild:
+                    return STATE.MAIN_MENU
+
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    raise Escape("Escape")
+                elif event.key == pygame.K_BACKSPACE:
+                    if cursor_pos == 0:
+                        continue
+                    passwd = passwd[:cursor_pos - 1] + passwd[cursor_pos:]
+                    cursor_pos = max(0, cursor_pos - 1)
+                elif event.key == pygame.K_LEFT:
+                    cursor_pos = max(0, cursor_pos - 1)
+                elif event.key == pygame.K_RIGHT:
+                    cursor_pos = min(len(passwd), cursor_pos + 1)
+                else:
+                    if event.unicode in string.ascii_letters + string.digits + string.punctuation:
+                        passwd = passwd[:cursor_pos] + event.unicode + passwd[cursor_pos:]
+                        cursor_pos += 1
+                    
         pygame.display.update()
-        clock.tick(30)
+        
+        if loop % 60 == 0:
+            cursor = not cursor
+        loop += 1
+        
+        clock.tick(60)

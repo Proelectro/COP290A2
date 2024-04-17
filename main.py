@@ -28,17 +28,14 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("CyberSavvy Adventures")
 
 # Load background image
-background_1 = pygame.image.load('images/background.jpg')  
-background_2 = pygame.image.load('images/white_background.jpg')
-background_3 = pygame.image.load('images/background.jpg')
-background_4 = pygame.image.load('images/background.jpg')
-
+background_1 = pygame.transform.scale(pygame.image.load('images/background.jpg'),(SCREEN_WIDTH, SCREEN_HEIGHT))  
+background_2 = pygame.transform.scale(pygame.image.load('images/white_background.jpg'),(SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
 
 if __name__ == "__main__":
-    state = STATE.START_SCREEN
-    # state = STATE.ROCKET
+    # state = STATE.START_SCREEN
+    state = STATE.PASSWORD
     
     while state:
         try:
@@ -46,13 +43,13 @@ if __name__ == "__main__":
                 state = start_screen(screen, background_1)
                 
             elif state == STATE.INTRO:
-                state = intro(screen, background_2)
+                state = intro(screen, background_1)
             
             elif state == STATE.MAIN_MENU:
-                state = main_menu(screen, background_3)
+                state = main_menu(screen, background_1)
             
             elif state == STATE.ARCADE:
-                state = arcade(screen, background_4)
+                state = arcade(screen, background_1)
             
             elif state == STATE.ROCKET:
                 state, win = rocket(screen, background_1, True)
@@ -61,10 +58,10 @@ if __name__ == "__main__":
                 state = bruteforce(screen, background_1)            
 
             elif state == STATE.PASSWORD:
-                state = password(screen, background_2)
+                state = password(screen, background_1)
                 
             elif state == STATE.MAZE:
-                state = maze(screen, background_2, False)
+                state = maze(screen, background_1, False)
                 
             elif state == STATE.STORY:
                 try:
@@ -77,7 +74,7 @@ if __name__ == "__main__":
                                     "To prevent this, we should use strong passwords.",
                                     "Let us learn how strong passwards can be created."
                                     ])
-                    assert password(screen, background_2)
+                    assert password(screen, background_1)
                     assert message(screen, background_1, "Internet Ethics",
                                 [
                                     "Congratulations! You have created a strong password.",
@@ -129,7 +126,7 @@ if __name__ == "__main__":
                                 ["Your computer was attacked by many viruses but your firewall has traped them."
                                     ,"Now you need to defeat them to win the game."
                                     ])
-                    assert maze(screen, background_2)
+                    assert maze(screen, background_1)
                     assert message(screen, background_1, "Congratulations",
                                 ["Congratulations! You have won the game."])
                     state = STATE.MAIN_MENU
