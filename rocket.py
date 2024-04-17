@@ -2,10 +2,14 @@ from base import *
 import random
 
 class Player:
-    images = [pygame.image.load("images/rocket_up.png"),
-                pygame.image.load("images/rocket_right.png"),
-                pygame.image.load("images/rocket_down.png"),
-                pygame.image.load("images/rocket_left.png")]
+    images_off = [pygame.transform.scale(pygame.image.load("images/rocket_up.png"), (50, 50)),
+                    pygame.transform.scale(pygame.image.load("images/rocket_right.png"), (50, 50)),
+                    pygame.transform.scale(pygame.image.load("images/rocket_down.png"), (50, 50)),
+                    pygame.transform.scale(pygame.image.load("images/rocket_left.png"), (50, 50))]
+    images_on = [pygame.transform.scale(pygame.image.load("images/Rocket_up.png"), (50, 50)),
+                    pygame.transform.scale(pygame.image.load("images/Rocket_right.png"), (50, 50)),
+                    pygame.transform.scale(pygame.image.load("images/Rocket_down.png"), (50, 50)),
+                    pygame.transform.scale(pygame.image.load("images/Rocket_left.png"), (50, 50))]
     
     
     def __init__(self, x, y):
@@ -23,14 +27,19 @@ class Player:
         self.vel = 0.2
         self.hitbox = (self.x, self.y, self.width, self.height)
         self.direction = 0
+        self.images = Player.images_off
 
     def draw(self, screen):
         screen.blit(self.images[self.direction], (self.x, self.y))
-        self.hitbox = (self.x, self.y, self.width, self.height)
-        pygame.draw.rect(screen, (255, 0, 0), self.hitbox, 2)
+        # self.hitbox = (self.x, self.y, self.width, self.height)
+        # pygame.draw.rect(screen, (255, 0, 0), self.hitbox, 2)
 
     def move(self):
         keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT] or keys[pygame.K_RIGHT] or keys[pygame.K_UP] or keys[pygame.K_DOWN]:
+            self.images = Player.images_on
+        else:
+            self.images = Player.images_off
         if keys[pygame.K_LEFT]:
             self.x -= self.vel
             
@@ -61,7 +70,10 @@ class Player:
         # if keys[pygame.K_s]:
         #     self.direction = 2
 class Virus:
-    image = pygame.image.load('images/virus.jpeg')
+    images = [pygame.transform.scale(pygame.image.load('images/virus1.png'),(50,50))
+    ,pygame.transform.scale(pygame.image.load('images/virus2.png'),(50,50))
+    ,pygame.transform.scale(pygame.image.load('images/virus1.png'),(50,50))
+    ,pygame.transform.scale(pygame.image.load('images/virus3.png'),(50,50))]
     
     def __init__(self, x, y, vel):
         self.x = x
@@ -71,11 +83,18 @@ class Virus:
         self.vel = vel
         self.hitbox = (self.x, self.y, self.width, self.height)
         self.alive = True
+        self.image_index = 0
+        self.image_period = 100
+        self.count = 0
         
     def draw(self, screen):
         if self.alive:
-            screen.blit(self.image, (self.x, self.y))
+            screen.blit(self.images[self.image_index], (self.x, self.y))
             self.hitbox = (self.x, self.y, self.width, self.height)
+            self.count  = (self.count + 1) % self.image_period
+            if self.count == 0:
+                self.image_index = (self.image_index + 1) % len(self.images)
+            
             # pygame.draw.rect(screen, (255, 0, 0), self.hitbox, 2)
 
     def move(self):
