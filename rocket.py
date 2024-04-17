@@ -170,7 +170,16 @@ class Bullet:
         elif self.direction == 3:
             self.x -= self.vel
 
-def rocket(screen, background, arcade = False):            
+def rocket(screen, background, arcade = False):      
+
+
+    background_music = pygame.mixer.Sound("sounds/background_music.wav")
+    background_music.set_volume(0.1)
+    
+    
+
+
+
     running = True
     
     pygame.mixer.fadeout(True)
@@ -189,8 +198,11 @@ def rocket(screen, background, arcade = False):
     
     # Initialize background position
     bg_y = 0
-
+    
     while running and not game_over:
+        background_music.play()
+      
+     
         # show the score on top right
         screen.blit(background, (0, bg_y))
         screen.blit(background, (0, bg_y - SCREEN_HEIGHT))
@@ -225,14 +237,14 @@ def rocket(screen, background, arcade = False):
             virus.move()
             if virus.check_collision_player(player):
                 game_over = True
-                game_over_sfx.play()
+                pygame.mixer.Channel(1).play(game_over_sfx)
                 break
             if bullet_active:
                 if bullet.x < 0 or bullet.x > SCREEN_WIDTH or bullet.y < 0 or bullet.y > SCREEN_HEIGHT:
                     bullet_active = False
                     continue
                 if virus.check_collision_bullet(bullet):
-                    virus_dying_sfx.play()
+                    pygame.mixer.Channel(2).play(virus_dying_sfx)
                     viruses.remove(virus)
                     virus.alive = False
                     dying_viruses.append(virus)
@@ -262,7 +274,7 @@ def rocket(screen, background, arcade = False):
                     raise Escape("Escape")
             if (event.type == pygame.MOUSEBUTTONDOWN and event.button == 1) or (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE):
                 if not bullet_active:
-                    bullet_sfx.play()
+                    pygame.mixer.Channel(3).play(bullet_sfx)
                     bullet = Bullet(player.x + player.width // 2, player.y, 1, player.direction)
                     bullet_active = True
         player.move()

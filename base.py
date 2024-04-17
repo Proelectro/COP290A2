@@ -8,6 +8,7 @@ class Button:
         self.color = WHITE
         self.height = height
         self.width = width
+        self.sound = pygame.mixer.Sound("sounds/click.wav")
 
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, self.rect, border_radius=(self.height // 4))
@@ -19,6 +20,7 @@ class Button:
     def __call__(self, pos):
         if self.rect.collidepoint(pos):
             self.on_click()
+            self.sound.play()
             return True
         return False
 

@@ -14,6 +14,14 @@ from maze import maze
 
 pygame.init()
 
+pygame.mixer.init()
+# set 10 chenneles for sound
+pygame.mixer.set_num_channels(10)
+
+background_music = pygame.mixer.Sound("sounds/background_music.wav")
+background_music.set_volume(0.1)
+background_music.play(-1)
+
 
 # Initialize the screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -29,8 +37,8 @@ background_4 = pygame.image.load('images/background.jpg')
 
 
 if __name__ == "__main__":
-    # state = STATE.START_SCREEN
-    state = STATE.ROCKET
+    state = STATE.START_SCREEN
+    # state = STATE.ROCKET
     
     while state:
         try:

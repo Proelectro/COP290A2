@@ -60,12 +60,19 @@ class Person(Base):
     
 class Virus(Base):
 
+    images = [pygame.transform.scale(pygame.image.load('images/virus1.png'),(CELL_WIDTH,CELL_HEIGHT))
+    ,pygame.transform.scale(pygame.image.load('images/virus2.png'),(CELL_WIDTH,CELL_HEIGHT))
+    ,pygame.transform.scale(pygame.image.load('images/virus1.png'),(CELL_WIDTH,CELL_HEIGHT))
+    ,pygame.transform.scale(pygame.image.load('images/virus3.png'),(CELL_WIDTH,CELL_HEIGHT))]
     
 
     def __init__(self, x, y, color):
         super().__init__(x, y, color)
         self.prev = (0, 1)
         self.speed = 200
+        self.image_index = 0
+        self.image_period = 10
+
     def get_closest_player(self, players):
         min_dist = float('inf')
         closest = None
@@ -99,6 +106,8 @@ class Virus(Base):
                     self.y = random.randint(0, m - 1)
                     new_pos = 2 * self.x + 1, 2 * self.y + 1
                     direction = (0, 1)
+
+                self.direction = list([(0, 1), (1, 0), (0, -1), (-1, 0)]).index(direction)
                     
                 if 0 <= new_pos[0] < 2 * n + 1 and 0 <= new_pos[1] < 2 * m + 1 and maze[new_pos[0]][new_pos[1]] != '#':
                     self.pos = new_pos
@@ -106,7 +115,13 @@ class Virus(Base):
                     self.y = (self.pos[1] - 1) // 2
                     moved = True
                     self.prev = direction
-            
+
+    def draw(self, screen):
+        self.count += 1
+        screen.blit(self.images[self.image_index], (self.pos[1]*CELL_WIDTH + MARGIN, self.pos[0]*CELL_HEIGHT + MARGIN))
+        if self.count % self.image_period == 0:
+            self.image_index = (self.image_index + 1) % len(self.images)
+        
 
 def find_start_goal(maze):
     start = ( 2*maze.start_x + 1, 2*maze.start_y+ 1)
