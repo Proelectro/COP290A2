@@ -76,9 +76,9 @@ class ScrollText:
             raise IndexError("Start of text list")
         
 def draw_nav_bar(screen, title):
-    pygame.draw.rect(screen, CYAN, (0, 0, SCREEN_WIDTH, 80))
-    pygame.draw.rect(screen, WHITE, (0, 0, SCREEN_WIDTH, 80), 5)
-    draw_text(screen, title, pygame.font.Font(*TITLE_FONT), WHITE, SCREEN_WIDTH // 2, 40)
+    pygame.draw.rect(screen, CYAN, (0, 0, SCREEN_WIDTH, NAV_BAR_HEIGHT))
+    pygame.draw.rect(screen, WHITE, (0, 0, SCREEN_WIDTH, NAV_BAR_HEIGHT), 5)
+    draw_text(screen, title, pygame.font.Font(*TITLE_FONT), WHITE, SCREEN_WIDTH // 2, NAV_BAR_HEIGHT // 2)
 
 def draw_text(screen, text, font, color, x, y):
     text_surface = font.render(text, True, color)
@@ -103,6 +103,7 @@ class STATE:
 SCREEN_WIDTH = 900
 SCREEN_HEIGHT = 650
 TICK_SPEED = 60
+NAV_BAR_HEIGHT = 80
 
 # Colors
 WHITE = (255, 255, 255)

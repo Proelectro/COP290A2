@@ -7,7 +7,7 @@ import os
 
 CELL_WIDTH = 30
 CELL_HEIGHT = 30
-MARGIN = 20
+MARGIN = 120
 
 def sign(x):
     return -1 if x < 0 else 1
@@ -43,7 +43,7 @@ class Person(Base):
         super().__init__(x, y, color)
         self.moving = False
         self.direction = 0
-        self.speed = 6
+        self.speed = 2
 
     def draw(self, screen):
         self.count += 1
@@ -69,7 +69,7 @@ class Virus(Base):
     def __init__(self, x, y, color):
         super().__init__(x, y, color)
         self.prev = (0, 1)
-        self.speed = 200
+        self.speed = 20
         self.image_index = 0
         self.image_period = 10
 
@@ -117,6 +117,8 @@ class Virus(Base):
                     self.prev = direction
 
     def draw(self, screen):
+        if not self.exist:
+            return
         self.count += 1
         screen.blit(self.images[self.image_index], (self.pos[1]*CELL_WIDTH + MARGIN, self.pos[0]*CELL_HEIGHT + MARGIN))
         if self.count % self.image_period == 0:
@@ -136,14 +138,21 @@ def draw_maze(screen, maze):
                 wall = pygame.transform.scale(wall, (CELL_WIDTH, CELL_HEIGHT))
                 screen.blit(wall, (MARGIN + j*CELL_WIDTH, MARGIN + i*CELL_HEIGHT))
 
-def popup(screen, background,  text):
+def popup(screen, background,  text_list):
     running = True
     
     while running:
         screen.blit(background, (0, 0))
-        
-        draw_text(screen, text, pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
-        draw_text(screen, "Click anywhere to continue...", pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
+        draw_nav_bar(screen, "Did you know?")
+        y_pos = 250
+        for text in text_list:
+            white_box = pygame.Rect(150, y_pos - 25, 600, 50)
+            pygame.draw.rect(screen, WHITE, white_box, border_radius=10)
+            draw_text(screen, text, pygame.font.Font(*OPTION_FONT), BLACK, SCREEN_WIDTH // 2, y_pos)
+            y_pos += 80
+        white_box = pygame.Rect(150, SCREEN_HEIGHT // 2 + 75, 600, 50)
+        pygame.draw.rect(screen, WHITE, white_box, border_radius=10)
+        draw_text(screen, "Click anywhere to continue...", pygame.font.Font(*OPTION_FONT), BLACK, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 100)
         pygame.display.update()
         
         for event in pygame.event.get():
@@ -159,6 +168,8 @@ def popup(screen, background,  text):
 
 
 def maze(screen, popup_background, arcade = False):
+    facts = [["Fact 1 TBA", "Fact line 2"], ["Fact 2 TBA", "Fact line 2"], ["Fact 3 TBA", "Fact line 2"], ["Fact 4 TBA", "Fact line 2"]] 
+    # popup(screen, popup_background, facts[0])
     maze = Maze(8, 12)
     maze.generate()
     pygame.display.set_caption("Maze Game")
@@ -174,13 +185,13 @@ def maze(screen, popup_background, arcade = False):
         pygame.K_RIGHT: (0, 1)
     }
     player = Person(0, 0, RED)
-    virus_1 = Virus(random.randint(0, maze.n - 1), random.randint(0, maze.m - 1), GREEN)
-    virus_2 = Virus(random.randint(0, maze.n - 1), random.randint(0, maze.m - 1), GREEN)
-
+    viruses = []
+    for _ in range(4):
+        viruses.append(Virus(random.randint(0, maze.n - 1), random.randint(0, maze.m - 1), GREEN))
 
     while running:
         screen.fill(BLUE)
-
+        draw_nav_bar(screen, "Maze")
         for event in pygame.event.get():
             
             if event.type == pygame.QUIT:
@@ -199,7 +210,7 @@ def maze(screen, popup_background, arcade = False):
                     player.moving = False
 
         if (idx < len(maze_hist)):
-            screen.fill(BLACK)
+            # screen.fill(BLACK)
             draw_maze(screen, maze_hist[idx])
             pygame.display.flip()  
             idx = (idx + 1) 
@@ -207,25 +218,22 @@ def maze(screen, popup_background, arcade = False):
 
         else:
         
-            screen.fill(BLACK)
+            # screen.fill(BLACK)
             draw_maze(screen, maze.maze)
             player.draw(screen)
-            virus_1.draw(screen)
-            virus_2.draw(screen)
-
+            for virus in viruses:
+                virus.draw(screen)
             player.move(maze.n, maze.m, maze.maze)
-            virus_1.move(maze.n, maze.m, maze.maze, [player])
-            virus_2.move(maze.n, maze.m, maze.maze, [player])
-
-            if player == virus_1 and virus_1.exist:
-                virus_1.exist = False
-                if not arcade:
-                    assert popup(screen, popup_background, "You have been caught by the virus!")
-            if player == virus_2 and virus_2.exist:
-                virus_2.exist = False
-                if not arcade:
-                    assert popup(screen, popup_background, "You have been caught by the virus!")                
-        
+            for i, virus in enumerate(viruses):
+                virus.move(maze.n, maze.m, maze.maze, [player])
+                if player == virus and virus.exist:
+                    virus.exist = False
+                    if not arcade:
+                        assert popup(screen, popup_background, facts[i])
+            total_virus = sum([virus.exist for virus in viruses])
+            
+            if total_virus == 0:
+                return STATE.MAIN_MENU
         pygame.display.flip()
 
     return STATE.EXIT

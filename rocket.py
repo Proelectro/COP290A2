@@ -157,7 +157,7 @@ class Bullet:
         self.direction = dir
 
     def draw(self, screen):
-        pygame.draw.rect(screen, (255, 0, 0), (self.x, self.y, self.width, self.height))
+        pygame.draw.circle(screen, (255, 0, 0), (self.x, self.y), 5)
         self.hitbox = (self.x, self.y, self.width, self.height)        
     
     def move(self):
@@ -187,7 +187,7 @@ def rocket(screen, background, arcade = False):
     virus_dying_sfx = pygame.mixer.Sound("sounds/virus_dying_sfx.wav")
     game_over_sfx  = pygame.mixer.Sound("sounds/game_over_sfx.wav")
 
-
+    pause_button = Button(SCREEN_WIDTH - 120, 20, 100, 40, "Pause")
     player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT - 100)
     score = 0
     bullet = None    
@@ -199,60 +199,68 @@ def rocket(screen, background, arcade = False):
     # Initialize background position
     bg_y = 0
     
+    pause = False
+    background_music.play()
+
     while running and not game_over:
-        background_music.play()
-      
+   
      
         # show the score on top right
         screen.blit(background, (0, bg_y))
         screen.blit(background, (0, bg_y - SCREEN_HEIGHT))
         
-        bg_y += 0.05  # Scroll speed
+        draw_nav_bar(screen, "Rocket")
+        pause_button.draw(screen)
+        
+        if not pause:
+            bg_y += 0.05  # Scroll speed
         
         if bg_y >= SCREEN_HEIGHT:
             bg_y = 0
         
         player.draw(screen)
-        draw_text(screen, f"Score: {score}", pygame.font.Font(*OPTION_FONT), WHITE, 60, 20)
+        draw_text(screen, f"Score: {score}", pygame.font.Font(*OPTION_FONT), WHITE, 90, 40)
         
         if bullet_active:
             bullet.draw(screen)
-            bullet.move()
+            if not pause:
+                bullet.move()
             if bullet.y < 0:
                 bullet_active = False
-        
-        if random.randint(0, 1000 * len(viruses) ** 2) == 0:
-            dir = random.randint(0, 3)
-            if dir == 0:
-                viruses.append(Virus(random.randint(0, SCREEN_WIDTH - 50), 0, 0.15, 0))
-            elif dir == 1:
-                viruses.append(Virus(SCREEN_WIDTH, random.randint(0, SCREEN_HEIGHT - 50), 0.15, 1))
-            elif dir == 2:
-                viruses.append(Virus(random.randint(0, SCREEN_WIDTH - 50), SCREEN_HEIGHT, 0.15, 2))
-            elif dir == 3:
-                viruses.append(Virus(0, random.randint(0, SCREEN_HEIGHT - 50), 0.15, 3))
+        if not pause:
+            if random.randint(0, 1000 * len(viruses) ** 2) == 0:
+                dir = random.randint(0, 3)
+                if dir == 0:
+                    viruses.append(Virus(random.randint(0, SCREEN_WIDTH - 50), NAV_BAR_HEIGHT, 0.15, 0))
+                elif dir == 1:
+                    viruses.append(Virus(SCREEN_WIDTH, random.randint(NAV_BAR_HEIGHT, SCREEN_HEIGHT - 50), 0.15, 1))
+                elif dir == 2:
+                    viruses.append(Virus(random.randint(0, SCREEN_WIDTH - 50), SCREEN_HEIGHT, 0.15, 2))
+                elif dir == 3:
+                    viruses.append(Virus(0, random.randint(NAV_BAR_HEIGHT, SCREEN_HEIGHT - 50), 0.15, 3))
 
         for virus in viruses:
             virus.draw(screen)
-            virus.move()
-            if virus.check_collision_player(player):
-                game_over = True
-                pygame.mixer.Channel(1).play(game_over_sfx)
-                break
-            if bullet_active:
-                if bullet.x < 0 or bullet.x > SCREEN_WIDTH or bullet.y < 0 or bullet.y > SCREEN_HEIGHT:
-                    bullet_active = False
-                    continue
-                if virus.check_collision_bullet(bullet):
-                    pygame.mixer.Channel(2).play(virus_dying_sfx)
-                    viruses.remove(virus)
-                    virus.alive = False
-                    dying_viruses.append(virus)
-                    bullet_active = False
-                    score += 1
-                    if score >= 4 and not arcade:
-                        return STATE.MAIN_MENU, True
-                    continue
+            if not pause:
+                virus.move()
+                if virus.check_collision_player(player):
+                    game_over = True
+                    pygame.mixer.Channel(1).play(game_over_sfx)
+                    break
+                if bullet_active:
+                    if bullet.x < 0 or bullet.x > SCREEN_WIDTH or bullet.y < 0 or bullet.y > SCREEN_HEIGHT:
+                        bullet_active = False
+                        continue
+                    if virus.check_collision_bullet(bullet):
+                        pygame.mixer.Channel(2).play(virus_dying_sfx)
+                        viruses.remove(virus)
+                        virus.alive = False
+                        dying_viruses.append(virus)
+                        bullet_active = False
+                        score += 1
+                        if score >= 4 and not arcade:
+                            return STATE.MAIN_MENU, True
+                        continue
             if virus.y > SCREEN_HEIGHT or virus.x < 0 or virus.x > SCREEN_WIDTH or virus.y < 0:
                 viruses.remove(virus)
                 score -= 1
@@ -272,11 +280,21 @@ def rocket(screen, background, arcade = False):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     raise Escape("Escape")
-            if (event.type == pygame.MOUSEBUTTONDOWN and event.button == 1) or (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE):
-                if not bullet_active:
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE):
+                if not bullet_active and not pause:
                     pygame.mixer.Channel(3).play(bullet_sfx)
-                    bullet = Bullet(player.x + player.width // 2, player.y, 1, player.direction)
+                    bullet = Bullet(player.x + player.width // 2, player.y + player.height // 2, 1, player.direction)
                     bullet_active = True
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pause_button(pygame.mouse.get_pos()):
+                    pause = not pause
+                    if pause:
+                        background_music.stop()
+                        pause_button.text = "Play"
+                    else:
+                        background_music.play()
+                        pause_button.text = "Pause"
+
         player.move()
         
     while game_over:
