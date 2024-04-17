@@ -158,6 +158,12 @@ class Bullet:
 def rocket(screen, background, arcade = False):            
     running = True
     
+    pygame.mixer.fadeout(True)
+    bullet_sfx = pygame.mixer.Sound("sounds/bullet_sfx.wav")
+    virus_dying_sfx = pygame.mixer.Sound("sounds/virus_dying_sfx.wav")
+    game_over_sfx  = pygame.mixer.Sound("sounds/game_over_sfx.wav")
+
+
     player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT - 100)
     score = 0
     bullet = None    
@@ -196,12 +202,14 @@ def rocket(screen, background, arcade = False):
             virus.move()
             if virus.check_collision_player(player):
                 game_over = True
+                game_over_sfx.play()
                 break
             if bullet_active:
                 if bullet.x < 0 or bullet.x > SCREEN_WIDTH or bullet.y < 0 or bullet.y > SCREEN_HEIGHT:
                     bullet_active = False
                     continue
                 if virus.check_collision_bullet(bullet):
+                    virus_dying_sfx.play()
                     viruses.remove(virus)
                     virus.alive = False
                     dying_viruses.append(virus)
@@ -229,6 +237,7 @@ def rocket(screen, background, arcade = False):
                     raise Escape("Escape")
             if (event.type == pygame.MOUSEBUTTONDOWN and event.button == 1) or (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE):
                 if not bullet_active:
+                    bullet_sfx.play()
                     bullet = Bullet(player.x + player.width // 2, player.y, 1, player.direction)
                     bullet_active = True
         player.move()
