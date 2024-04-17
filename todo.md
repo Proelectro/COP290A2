@@ -1,3 +1,13 @@
+# to do : 
+1. Add levels / scores
+2. Find unifying graphics
+3. Incorporate more cyber - security concepts
+4. Add music
+5. Make Slides
+
+
+##### ------------------------------------------------------------------------------------------
+
 # Ideas
 1. think of a story - divide it into small puzzles.
 2. target audience  - children
@@ -18,7 +28,8 @@
 
 6. [Maze Genrator ALgorithm](https://courses.cs.washington.edu/courses/cse326/08sp/lectures/18-disjoint-union-find.pdf)
 
-7. [Virus Sprites](https://images.app.goo.gl/eZMAg3oT9u9Gs7GH8)
+7. [Cyber Security Concepts](https://www.ftc.gov/system/files/attachments/cybersecurity-small-business/cybersecuirty_sb_factsheets_all.pdf)
+
 
 In most countries, a large percentage of children
 between the ages of eight and thirteen have access to a mobile

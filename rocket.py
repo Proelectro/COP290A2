@@ -31,7 +31,7 @@ class Player:
 
     def draw(self, screen):
         screen.blit(self.images[self.direction], (self.x, self.y))
-        # self.hitbox = (self.x, self.y, self.width, self.height)
+        self.hitbox = (self.x, self.y, self.width, self.height)
         # pygame.draw.rect(screen, (255, 0, 0), self.hitbox, 2)
 
     def move(self):

@@ -59,6 +59,9 @@ class Person(Base):
                 self.y = (self.pos[1] - 1) // 2
     
 class Virus(Base):
+
+    
+
     def __init__(self, x, y, color):
         super().__init__(x, y, color)
         self.prev = (0, 1)
