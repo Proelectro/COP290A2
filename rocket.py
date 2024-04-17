@@ -6,10 +6,10 @@ class Player:
                     pygame.transform.scale(pygame.image.load("images/rocket_right.png"), (50, 50)),
                     pygame.transform.scale(pygame.image.load("images/rocket_down.png"), (50, 50)),
                     pygame.transform.scale(pygame.image.load("images/rocket_left.png"), (50, 50))]
-    images_on = [pygame.transform.scale(pygame.image.load("images/Rocket_up.png"), (50, 50)),
-                    pygame.transform.scale(pygame.image.load("images/Rocket_right.png"), (50, 50)),
-                    pygame.transform.scale(pygame.image.load("images/Rocket_down.png"), (50, 50)),
-                    pygame.transform.scale(pygame.image.load("images/Rocket_left.png"), (50, 50))]
+    images_on = [pygame.transform.scale(pygame.image.load("images/Rocket_up_on.png"), (50, 50)),
+                    pygame.transform.scale(pygame.image.load("images/Rocket_right_on.png"), (50, 50)),
+                    pygame.transform.scale(pygame.image.load("images/Rocket_down_on.png"), (50, 50)),
+                    pygame.transform.scale(pygame.image.load("images/Rocket_left_on.png"), (50, 50))]
     
     
     def __init__(self, x, y):
@@ -24,7 +24,7 @@ class Player:
         self.y = y
         self.width = 50
         self.height = 50
-        self.vel = 0.2
+        self.vel = 0.8
         self.hitbox = (self.x, self.y, self.width, self.height)
         self.direction = 0
         self.images = Player.images_off
@@ -86,7 +86,7 @@ class Virus:
         self.y = y
         self.width = 50
         self.height = 50
-        self.vel = vel
+        self.vel = 0.1
         self.hitbox = (self.x, self.y, self.width, self.height)
         self.alive = True
         self.image_index = 0
