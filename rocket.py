@@ -86,7 +86,7 @@ class Virus:
         self.y = y
         self.width = 50
         self.height = 50
-        self.vel = 0.1
+        self.vel = vel
         self.hitbox = (self.x, self.y, self.width, self.height)
         self.alive = True
         self.image_index = 0
@@ -172,7 +172,11 @@ class Bullet:
 
 def rocket(screen, background, arcade = False):      
 
-
+    if arcade:
+        level = draw_level(screen, background)
+    else:
+        level = 1
+        
     background_music = pygame.mixer.Sound("sounds/background_music.wav")
     background_music.set_volume(0.1)
     
@@ -228,16 +232,17 @@ def rocket(screen, background, arcade = False):
             if bullet.y < 0:
                 bullet_active = False
         if not pause:
-            if random.randint(0, 1000 * len(viruses) ** 2) == 0:
+            if random.randint(0, 1000 * len(viruses) ** 2 / level**2) == 0:
                 dir = random.randint(0, 3)
+                virus_vel = 0.15*level
                 if dir == 0:
-                    viruses.append(Virus(random.randint(0, SCREEN_WIDTH - 50), NAV_BAR_HEIGHT, 0.15, 0))
+                    viruses.append(Virus(random.randint(0, SCREEN_WIDTH - 50), NAV_BAR_HEIGHT, virus_vel , 0))
                 elif dir == 1:
-                    viruses.append(Virus(SCREEN_WIDTH, random.randint(NAV_BAR_HEIGHT, SCREEN_HEIGHT - 50), 0.15, 1))
+                    viruses.append(Virus(SCREEN_WIDTH, random.randint(NAV_BAR_HEIGHT, SCREEN_HEIGHT - 50), virus_vel, 1))
                 elif dir == 2:
-                    viruses.append(Virus(random.randint(0, SCREEN_WIDTH - 50), SCREEN_HEIGHT, 0.15, 2))
+                    viruses.append(Virus(random.randint(0, SCREEN_WIDTH - 50), SCREEN_HEIGHT, virus_vel, 2))
                 elif dir == 3:
-                    viruses.append(Virus(0, random.randint(NAV_BAR_HEIGHT, SCREEN_HEIGHT - 50), 0.15, 3))
+                    viruses.append(Virus(0, random.randint(NAV_BAR_HEIGHT, SCREEN_HEIGHT - 50), virus_vel, 3))
 
         for virus in viruses:
             virus.draw(screen)

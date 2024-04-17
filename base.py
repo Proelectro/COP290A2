@@ -87,13 +87,17 @@ def draw_text(screen, text, font, color, x, y):
     screen.blit(text_surface, text_rect)
     
     
-def draw_level(screen , background):
+def draw_level(screen , background, level = True):
+
     running = True
-    easy = Button(SCREEN_WIDTH // 2 - 200, 200, 400, 50, "Easy")
-    hard = Button(SCREEN_WIDTH // 2 - 200, 300, 400, 50, "Hard")
+    es = ["Single Player", "Easy"][level]
+    hr = ["Multi Player", "Hard"][level]
+
+    easy = Button(SCREEN_WIDTH // 2 - 200, 200, 400, 50, es)
+    hard = Button(SCREEN_WIDTH // 2 - 200, 300, 400, 50, hr)
     while running:
         screen.blit(background, (0, 0))
-        draw_nav_bar(screen, "Level")
+        draw_nav_bar(screen, "Level" if level else "Mode")
         easy.draw(screen)
         hard.draw(screen)
         pygame.display.flip()

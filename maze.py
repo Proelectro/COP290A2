@@ -166,8 +166,32 @@ def popup(screen, background,  text_list):
                 running = False
     return 1
 
-
+def display_final_score(screen, background, score_1, score_2):
+    running = True
+    while running:
+        screen.blit(background, (0, 0))
+        draw_nav_bar(screen, "Score")
+        draw_text(screen, "Player 1: " + str(score_1), pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50)
+        draw_text(screen, "Player 2: " + str(score_2), pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
+        draw_text(screen, "Click anywhere to continue...", pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 150)
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                return STATE.EXIT
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    raise Escape("Escape")
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                running = False
+    return STATE.MAIN_MENU
 def maze(screen, popup_background, arcade = False):
+    
+    if arcade:
+        num_players = draw_level(screen, popup_background, level = False)
+    else:
+        num_players = 1
+    
     facts = [["Fact 1 TBA", "Fact line 2"], ["Fact 2 TBA", "Fact line 2"], ["Fact 3 TBA", "Fact line 2"], ["Fact 4 TBA", "Fact line 2"]] 
     # popup(screen, popup_background, facts[0])
     maze = Maze(8, 12)
@@ -177,21 +201,41 @@ def maze(screen, popup_background, arcade = False):
     idx = 0
     maze_hist = maze.history
     running = True
+    
 
-    moves = {
+    moves_1 = {
         pygame.K_UP: (-1, 0),
         pygame.K_DOWN: (1, 0),
         pygame.K_LEFT: (0, -1),
         pygame.K_RIGHT: (0, 1)
     }
-    player = Person(0, 0, RED)
+    
+    moves_2 = {
+        pygame.K_w: (-1, 0),
+        pygame.K_s: (1, 0),
+        pygame.K_a: (0, -1),
+        pygame.K_d: (0, 1)
+    }
+    
+    if num_players == 2:
+        player_1 = Person(maze.n - 1, maze.m - 1 , RED)
+        player_2 = Person(0, 0, YELLOW)
+    else:
+        player_1 = Person(0, 0, RED)
+        player_2 = None
+    score_1 = 0
+    score_2 = 0
+    
     viruses = []
-    for _ in range(4):
+    for _ in range(4*num_players):
         viruses.append(Virus(random.randint(0, maze.n - 1), random.randint(0, maze.m - 1), GREEN))
 
     while running:
         screen.fill(BLUE)
         draw_nav_bar(screen, "Maze")
+        if num_players == 2:
+            draw_text(screen, "Score: " + str(score_1), pygame.font.Font(*TITLE_FONT), WHITE, SCREEN_WIDTH - 100, 40)
+            draw_text(screen, "Score: " + str(score_2), pygame.font.Font(*TITLE_FONT), WHITE, 100, 40)
         for event in pygame.event.get():
             
             if event.type == pygame.QUIT:
@@ -202,12 +246,21 @@ def maze(screen, popup_background, arcade = False):
                 if event.key == pygame.K_ESCAPE:
                     raise Escape("Escape")
                 if event.key in [pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT]:
-                    player.moving = moves[event.key]
-                    player.direction = list(moves.keys()).index(event.key)
+                    player_1.moving = moves_1[event.key]
+                    player_1.direction = list(moves_1.keys()).index(event.key)
+                    
+                if num_players == 2:
+                    if event.key in [pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d]:
+                        player_2.moving = moves_2[event.key]
+                        player_2.direction = list(moves_2.keys()).index(event.key)
     
             elif event.type == pygame.KEYUP:
                 if event.key in [pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT]:
-                    player.moving = False
+                    player_1.moving = False
+                    
+                if num_players == 2:
+                    if event.key in [pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d]:
+                        player_2.moving = False
 
         if (idx < len(maze_hist)):
             # screen.fill(BLACK)
@@ -220,19 +273,30 @@ def maze(screen, popup_background, arcade = False):
         
             # screen.fill(BLACK)
             draw_maze(screen, maze.maze)
-            player.draw(screen)
+            player_1.draw(screen)
+            if num_players == 2:
+                player_2.draw(screen)
             for virus in viruses:
                 virus.draw(screen)
-            player.move(maze.n, maze.m, maze.maze)
+            player_1.move(maze.n, maze.m, maze.maze)
+            if num_players == 2:
+                player_2.move(maze.n, maze.m, maze.maze)
             for i, virus in enumerate(viruses):
-                virus.move(maze.n, maze.m, maze.maze, [player])
-                if player == virus and virus.exist:
+                virus.move(maze.n, maze.m, maze.maze, [player_1] + [player_2] * (num_players - 1))
+                if player_1 == virus and virus.exist:
                     virus.exist = False
+                    score_1 += 1
                     if not arcade:
                         assert popup(screen, popup_background, facts[i])
+                if num_players == 2 and player_2 == virus and virus.exist:
+                    virus.exist = False
+                    score_2 += 1
+                                            
             total_virus = sum([virus.exist for virus in viruses])
             
             if total_virus == 0:
+                if num_players == 2:
+                    assert display_final_score(screen, popup_background, score_1, score_2)
                 return STATE.MAIN_MENU
         pygame.display.flip()
 
