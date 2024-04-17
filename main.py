@@ -58,7 +58,7 @@ if __name__ == "__main__":
                 state = bruteforce(screen, background_1)            
 
             elif state == STATE.PASSWORD:
-                state = password(screen, background_1)
+                state = password(screen, background_1, True)
                 
             elif state == STATE.MAZE:
                 state = maze(screen, background_1, False)

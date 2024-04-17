@@ -47,19 +47,31 @@ class Constraint :
         else:
             self.color = RED
 
-def password(screen, background):
+def password(screen, background, arcade = False):
+    
+    if arcade:
+        level = draw_level(screen, background)
+    else:
+        level = 1
+    
     # textinput = pygame_textinput.TextInputVisualizer(font_object=pygame.font.Font(*OPTION_FONT), font_color=BLACK)
     # textinput.cursor_color = BLACK
     clock = pygame.time.Clock()
-    c = [None] * 7
-    c[0] = Constraint("1). Your password must have atleat 5 characters", has_length)
-    c[1] = Constraint("2). Your password must have atleat 1 number", has_num)
-    c[2] = Constraint("3). Your password must have atleat 1 uppercase letter", has_upper)
-    c[3] = Constraint("4). Your password must have atleat 1 special character", has_special)
-    c[4] = Constraint("5). The sum of the digits in your password must be 25", has_add_25)
-    c[5] = Constraint("6). Your password must have a month", has_month)
-    c[6] = Constraint("7). Your password must have a roman numeral", has_roman)
-
+    if level == 1:
+        c = [None] * 7
+        c[0] = Constraint("1). Your password must have atleat 5 characters", has_length)
+        c[1] = Constraint("2). Your password must have atleat 1 number", has_num)
+        c[2] = Constraint("3). Your password must have atleat 1 uppercase letter", has_upper)
+        c[3] = Constraint("4). Your password must have atleat 1 special character", has_special)
+        c[4] = Constraint("5). The sum of the digits in your password must be 25", has_add_25)
+        c[5] = Constraint("6). Your password must have a month", has_month)
+        c[6] = Constraint("7). Your password must have a roman numeral", has_roman)
+    else:
+        c = [None] * 4
+        c[0] = Constraint("1). Your password must have atleat 10 characters", has_length)
+        c[1] = Constraint("2). Your password must have atleat 2 numbers", has_num)
+        c[2] = Constraint("3). Your password must have atleat 2 uppercase letter", has_upper)
+        c[3] = Constraint("4). Your password must have atleat 2 special character", has_special)
     running = True
     vaild = False
     password_box = pygame.Rect(150, 110, 600, 50)
@@ -72,7 +84,8 @@ def password(screen, background):
         screen.blit(background, (0, 0))
         draw_nav_bar(screen, "Strong Password")
         pygame.draw.rect(screen, WHITE, password_box, border_radius=10)
-        draw_text(screen, passwd[:cursor_pos] + [" ", "|"][cursor] + passwd[cursor_pos:], pygame.font.Font(*OPTION_FONT), BLACK, 450, 135)
+        draw_password = passwd if level == 1 else "*" * len(passwd)
+        draw_text(screen, draw_password[:cursor_pos] + [" ", "|"][cursor] + draw_password[cursor_pos:], pygame.font.Font(*OPTION_FONT), BLACK, 450, 135)
         message_pos_y = 200
         display_constraints = []
         for constraint in c:

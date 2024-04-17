@@ -1,4 +1,5 @@
 import pygame
+import sys
 
 class Button:
     def __init__(self, x, y, width, height, text, on_click = lambda: None):
@@ -84,6 +85,33 @@ def draw_text(screen, text, font, color, x, y):
     text_surface = font.render(text, True, color)
     text_rect = text_surface.get_rect(center=(x, y))
     screen.blit(text_surface, text_rect)
+    
+    
+def draw_level(screen , background):
+    running = True
+    easy = Button(SCREEN_WIDTH // 2 - 200, 200, 400, 50, "Easy")
+    hard = Button(SCREEN_WIDTH // 2 - 200, 300, 400, 50, "Hard")
+    while running:
+        screen.blit(background, (0, 0))
+        draw_nav_bar(screen, "Level")
+        easy.draw(screen)
+        hard.draw(screen)
+        pygame.display.flip()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    raise Escape("Escape")
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if easy(event.pos):
+                    return 1
+                if hard(event.pos):
+                    return 2
+        
+
+        
 
 
 class Escape(Exception):

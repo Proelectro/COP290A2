@@ -150,9 +150,9 @@ def popup(screen, background,  text_list):
             pygame.draw.rect(screen, WHITE, white_box, border_radius=10)
             draw_text(screen, text, pygame.font.Font(*OPTION_FONT), BLACK, SCREEN_WIDTH // 2, y_pos)
             y_pos += 80
-        white_box = pygame.Rect(150, SCREEN_HEIGHT // 2 + 75, 600, 50)
-        pygame.draw.rect(screen, WHITE, white_box, border_radius=10)
-        draw_text(screen, "Click anywhere to continue...", pygame.font.Font(*OPTION_FONT), BLACK, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 100)
+        # white_box = pygame.Rect(150, SCREEN_HEIGHT // 2 + 75, 600, 50)
+        # pygame.draw.rect(screen, WHITE, white_box, border_radius=10)
+        draw_text(screen, "Click anywhere to continue...", pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 100)
         pygame.display.update()
         
         for event in pygame.event.get():
