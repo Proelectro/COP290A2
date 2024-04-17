@@ -81,7 +81,7 @@ class Virus:
     ,pygame.transform.scale(pygame.image.load('images/rocket_left.png'),(50,50))]
 
     
-    def __init__(self, x, y, vel):
+    def __init__(self, x, y, vel, dir=0):
         self.x = x
         self.y = y
         self.width = 50
@@ -94,6 +94,7 @@ class Virus:
         self.count = 0
         self.dying_period = 100
         self.dying_count = 0
+        self.direction = dir
         
     def draw(self, screen):
         if self.alive:
@@ -114,10 +115,24 @@ class Virus:
             # pygame.draw.rect(screen, (255, 0, 0), self.hitbox, 2)
 
     def move(self):
-        self.y += self.vel
+        if self.direction == 0:
+            self.y += self.vel
+        elif self.direction == 1:
+            self.x -= self.vel
+        elif self.direction == 2:
+            self.y -= self.vel
+        elif self.direction == 3:
+            self.x += self.vel
+
         if self.y > SCREEN_HEIGHT:
             self.alive = False
-            
+        if self.x < 0:
+            self.alive = False
+        if self.x > SCREEN_WIDTH:
+            self.alive = False
+        if self.y < 0:
+            self.alive = False
+
     def check_collision_player(self, player):
         if self.hitbox[1] + self.hitbox[3] > player.hitbox[1] and self.hitbox[1] < player.hitbox[1] + player.hitbox[3]:
             if self.hitbox[0] + self.hitbox[2] > player.hitbox[0] and self.hitbox[0] < player.hitbox[0] + player.hitbox[2]:
@@ -180,7 +195,7 @@ def rocket(screen, background, arcade = False):
         screen.blit(background, (0, bg_y))
         screen.blit(background, (0, bg_y - SCREEN_HEIGHT))
         
-        bg_y += 0.01  # Scroll speed
+        bg_y += 0.05  # Scroll speed
         
         if bg_y >= SCREEN_HEIGHT:
             bg_y = 0
@@ -195,8 +210,16 @@ def rocket(screen, background, arcade = False):
                 bullet_active = False
         
         if random.randint(0, 1000 * len(viruses) ** 2) == 0:
-            viruses.append(Virus(random.randint(0, SCREEN_WIDTH - 50), 0, 0.1))
-        
+            dir = random.randint(0, 3)
+            if dir == 0:
+                viruses.append(Virus(random.randint(0, SCREEN_WIDTH - 50), 0, 0.15, 0))
+            elif dir == 1:
+                viruses.append(Virus(SCREEN_WIDTH, random.randint(0, SCREEN_HEIGHT - 50), 0.15, 1))
+            elif dir == 2:
+                viruses.append(Virus(random.randint(0, SCREEN_WIDTH - 50), SCREEN_HEIGHT, 0.15, 2))
+            elif dir == 3:
+                viruses.append(Virus(0, random.randint(0, SCREEN_HEIGHT - 50), 0.15, 3))
+
         for virus in viruses:
             virus.draw(screen)
             virus.move()
@@ -218,13 +241,15 @@ def rocket(screen, background, arcade = False):
                     if score >= 4 and not arcade:
                         return STATE.MAIN_MENU, True
                     continue
-
-        for virus in dying_viruses:
-            virus.draw_destroyed(screen)
-
-            if virus.y > SCREEN_HEIGHT:
+            if virus.y > SCREEN_HEIGHT or virus.x < 0 or virus.x > SCREEN_WIDTH or virus.y < 0:
                 viruses.remove(virus)
                 score -= 1
+                score = max(0, score)
+        for virus in dying_viruses:
+            virus.draw_destroyed(screen)
+            if virus.dying_count >= virus.dying_period:
+                dying_viruses.remove(virus)
+            
         
         pygame.display.update()
         

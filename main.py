@@ -121,7 +121,7 @@ if __name__ == "__main__":
                                 ["Your computer was attacked by many viruses but your firewall has traped them."
                                     ,"Now you need to defeat them to win the game."
                                     ])
-                    assert maze(screen)
+                    assert maze(screen, background_2)
                     assert message(screen, background_1, "Congratulations",
                                 ["Congratulations! You have won the game."])
                     state = STATE.MAIN_MENU
