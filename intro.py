@@ -4,10 +4,11 @@ import sys
 
 def intro(screen, background):
     running = True
-    messages = ["You are cyberlink and have been summoned to protect the kingdom of cyberland", 
-                "from the invasion of the virus lord hackhound.",
-                "But to be able to defeat him, you have to go on an adventure", 
-                "and master the weapons of cyber security to be able to save the kingdom."]
+    messages = [
+        "Welcome to Cyber Adventures!",
+        "In this game, you will be presented with a series of challenges.",
+        "Each challenge will teach you about Cyber Security.",
+    ]
     
     timer = pygame.time.Clock()
     intro_text = ScrollText(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50, SCREEN_WIDTH - 100, 50,

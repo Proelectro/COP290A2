@@ -95,10 +95,10 @@ class Virus:
     ,pygame.transform.scale(pygame.image.load('images/virus1.png'),(50,50))
     ,pygame.transform.scale(pygame.image.load('images/virus3.png'),(50,50))]
 
-    destroyed_images = [pygame.transform.scale(pygame.image.load('images/rocket_up.png'),(50,50))
-    ,pygame.transform.scale(pygame.image.load('images/rocket_right.png'),(50,50))   
-    ,pygame.transform.scale(pygame.image.load('images/rocket_down.png'),(50,50))
-    ,pygame.transform.scale(pygame.image.load('images/rocket_left.png'),(50,50))]
+    destroyed_images = [pygame.transform.scale(pygame.image.load('images/deadvirus1.png'),(50,50))
+    ,pygame.transform.scale(pygame.image.load('images/deadvirus2.png'),(50,50))
+    ,pygame.transform.scale(pygame.image.load('images/deadvirus3.png'),(50,50))
+    ,pygame.transform.scale(pygame.image.load('images/deadvirus4.png'),(50,50))]
 
     
     def __init__(self, x, y, vel, dir=0):
@@ -112,7 +112,7 @@ class Virus:
         self.image_index = 0
         self.image_period = 100
         self.count = 0
-        self.dying_period = 100
+        self.dying_period = 150
         self.dying_count = 0
         self.direction = dir
         self.touch = False

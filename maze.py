@@ -72,7 +72,7 @@ class Virus(Base):
         self.prev = (0, 1)
         self.speed = 30
         self.image_index = 0
-        self.image_period = 10
+        self.image_period = 100
 
     def get_closest_player(self, players):
         min_dist = float('inf')
@@ -82,20 +82,24 @@ class Virus(Base):
             if dist < min_dist:
                 min_dist = dist
                 closest = player
-        return closest
+        return closest, min_dist
         
     def move(self, n, m, maze, players):
         moved = False
-        closest_player = self.get_closest_player(players)
+        closest_player, mn_dist = self.get_closest_player(players)
         x_diff = closest_player.pos[0] - self.pos[0]
         y_diff = closest_player.pos[1] - self.pos[1]
         high = [(-sign(x_diff), 0), (0, -sign(y_diff))]
         low = [(0, sign(y_diff)), (sign(x_diff), 0)]
+        if mn_dist < 10:
+            p = 95
+        else:
+            p = 30
         if self.count % self.speed == 0:
             flag = False
             while not moved:
                 rnd = random.randint(0, 100)
-                if flag or  rnd < 95:
+                if flag or  rnd < p:
                     direction = random.choices(high + low, weights=[30, 30, 1, 1])[0]
                     new_pos = (self.pos[0] + direction[0], self.pos[1] + direction[1])
                 elif rnd < 100:
@@ -169,13 +173,16 @@ def popup(screen, background,  text_list):
                 running = False
     return 1
 
-def display_final_score(screen, background, score_1, score_2):
+def display_final_score(screen, background, score_1, score_2 = -1):
     running = True
     while running:
         screen.blit(background, (0, 0))
         draw_nav_bar(screen, "Score")
-        draw_text(screen, "Player 1: " + str(score_1), pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50)
-        draw_text(screen, "Player 2: " + str(score_2), pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
+        if score_2 == -1:
+            draw_text(screen, "Time Taken: " + str(score_1) + " seconds", pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+        else:
+            draw_text(screen, "Player 1: " + str(score_1), pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50)
+            draw_text(screen, "Player 2: " + str(score_2), pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
         draw_text(screen, "Click anywhere to continue...", pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 150)
         pygame.display.update()
         for event in pygame.event.get():
@@ -232,13 +239,16 @@ def maze(screen, popup_background, arcade = False):
     viruses = []
     for _ in range(4*num_players):
         viruses.append(Virus(random.randint(0, maze.n - 1), random.randint(0, maze.m - 1), GREEN))
-
+    not_started = True
     while running:
-        screen.fill(BLUE)
+        # screen.fill(BLUE)
+        screen.blit(popup_background, (0, 0))
         draw_nav_bar(screen, "Maze")
         if num_players == 2:
             draw_text(screen, "Score: " + str(score_1), pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH - 100, 40)
             draw_text(screen, "Score: " + str(score_2), pygame.font.Font(*OPTION_FONT), WHITE, 100, 40)
+        else:
+            draw_text(screen, "Score: " + str(score_1), pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH - 100, 40)
         for event in pygame.event.get():
             
             if event.type == pygame.QUIT:
@@ -270,10 +280,12 @@ def maze(screen, popup_background, arcade = False):
             draw_maze(screen, maze_hist[idx])
             pygame.display.flip()  
             idx = (idx + 1) 
-            clock.tick(60)
+            clock.tick(100)
 
         else:
-        
+            if not_started:
+                start_time = time.time()
+                not_started = False
             # screen.fill(BLACK)
             draw_maze(screen, maze.maze)
             player_1.draw(screen)
@@ -300,6 +312,12 @@ def maze(screen, popup_background, arcade = False):
             if total_virus == 0:
                 if num_players == 2:
                     assert display_final_score(screen, popup_background, score_1, score_2)
+                else:
+                    end_time = time.time()
+                    time_taken = end_time - start_time
+                    ## display only uptill 2 decimal places
+                    time_taken = round(time_taken, 2)
+                    assert display_final_score(screen, popup_background, time_taken)
                 return STATE.MAIN_MENU
         pygame.display.flip()
 

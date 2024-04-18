@@ -13,7 +13,7 @@ def start_screen(screen, background):
     while running:
         screen.blit(background, (0, 0))
         
-        draw_text(screen, "CyberSavvy Adventures", pygame.font.Font(*TITLE_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4)
+        draw_text(screen, "Cyber Adventures", pygame.font.Font(*TITLE_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4)
 
         # Play Button
 

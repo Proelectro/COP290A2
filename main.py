@@ -25,17 +25,18 @@ background_music.play(-1)
 
 # Initialize the screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("CyberSavvy Adventures")
+pygame.display.set_caption("Cyber Adventures")
 
 # Load background image
-background_1 = pygame.transform.scale(pygame.image.load('images/purple bg.png'),(SCREEN_WIDTH, SCREEN_HEIGHT))  
-background_2 = pygame.transform.scale(pygame.image.load('images/white_background.jpg'),(SCREEN_WIDTH, SCREEN_HEIGHT))
+# background_1 = pygame.transform.scale(pygame.image.load('images/purple_background.jpg'),(SCREEN_WIDTH, SCREEN_HEIGHT))  
+background_2 = pygame.transform.scale(pygame.image.load('images/rocket_background.jpg'),(SCREEN_WIDTH, SCREEN_HEIGHT))
+background_1 = pygame.transform.scale(pygame.image.load('images/rocket_background.jpg'),(SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
 
 if __name__ == "__main__":
-    state = STATE.START_SCREEN
-    # state = STATE.PASSWORD
+    # state = STATE.START_SCREEN
+    state = STATE.MAZE
     # state = maze(screen, background_1, False)
     
     while state:
@@ -53,7 +54,7 @@ if __name__ == "__main__":
                 state = arcade(screen, background_1)
             
             elif state == STATE.ROCKET:
-                state = rocket(screen, background_1, True)
+                state = rocket(screen, background_2, True)
 
             elif state == STATE.BRUTEFORCE:
                 state = bruteforce(screen, background_1)            
@@ -67,7 +68,9 @@ if __name__ == "__main__":
             elif state == STATE.STORY:
                 try:
                     assert message(screen, background_1, "Story Mode" , ["You will learn about important cyber security concepts in this game."])
-                    assert message(screen, background_1,"Passwords", ["Do you know why our passwords should be strong?"])
+                    assert message(screen, background_1,"Passwords", ["Do you know why our passwords should be strong?"
+                                                                      , "Try creating your own password in the following puzzle."
+                                                                      , "A hacker will try to break your password."])
                     assert bruteforce(screen, background_1)
                     assert message(screen, background_1, "Strong Passwords",
                                 ["This was a brute force attack.",
@@ -76,6 +79,16 @@ if __name__ == "__main__":
                                     "Let us learn how strong passwards can be created."
                                     ])
                     assert password(screen, background_1)
+
+                    assert message(screen, background_1, "Internet Ethics",
+                                   [
+                                        "Congratulations! You have created a strong password.",
+                                        "Now let us move on to the next challenge.",
+                                        "Let us now learn about internet ethics.",
+                                        "Move using the arrow keys.",
+                                        "Press 'Space' to shoot."
+                                        "Prevent the viruses from entering your computer on the other side."
+                                   ])
                     
                     assert rocket(screen, background_1)
                 
@@ -88,7 +101,7 @@ if __name__ == "__main__":
 
                     assert message(screen, background_1, "Viruses and Fire Wall",
                                 ["Your computer was attacked by many viruses but your firewall has traped them."
-                                    ,"Now you need to defeat them to win the game."
+                                    ,"Now you need to catch them all."
                                     ])
                     assert maze(screen, background_1)
                     assert message(screen, background_1, "Congratulations",

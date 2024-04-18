@@ -106,7 +106,7 @@ class ScrollText:
             raise IndexError("Start of text list")
         
 def draw_nav_bar(screen, title):
-    pygame.draw.rect(screen, CYAN, (0, 0, SCREEN_WIDTH, NAV_BAR_HEIGHT))
+    pygame.draw.rect(screen, DARK_GRAY, (0, 0, SCREEN_WIDTH, NAV_BAR_HEIGHT))
     pygame.draw.rect(screen, WHITE, (0, 0, SCREEN_WIDTH, NAV_BAR_HEIGHT), 5)
     draw_text(screen, title, pygame.font.Font(*TITLE_FONT), WHITE, SCREEN_WIDTH // 2, NAV_BAR_HEIGHT // 2)
 
@@ -174,6 +174,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GREEN = (0, 255, 0)
 GRAY = (169, 169, 169)
+DARK_GRAY = (80, 80, 80)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 CYAN = (0, 128, 128)
