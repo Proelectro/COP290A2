@@ -156,26 +156,28 @@ def password(screen, background, arcade = False):
         for event in events:
             if event.type == pygame.QUIT:
                 return STATE.EXIT
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.MOUSEBUTTONDOWN:
                 if vaild:
                     return STATE.MAIN_MENU
+            
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     raise Escape("Escape")
-                elif event.key == pygame.K_BACKSPACE:
-                    if cursor_pos == 0:
-                        continue
-                    passwd = passwd[:cursor_pos - 1] + passwd[cursor_pos:]
-                    cursor_pos = max(0, cursor_pos - 1)
-                elif event.key == pygame.K_LEFT:
-                    cursor_pos = max(0, cursor_pos - 1)
-                elif event.key == pygame.K_RIGHT:
-                    cursor_pos = min(len(passwd), cursor_pos + 1)
-                else:
-                    if event.unicode in string.ascii_letters + string.digits + string.punctuation:
-                        passwd = passwd[:cursor_pos] + event.unicode + passwd[cursor_pos:]
-                        cursor_pos += 1
+                if not vaild:
+                    if event.key == pygame.K_BACKSPACE:
+                        if cursor_pos == 0:
+                            continue
+                        passwd = passwd[:cursor_pos - 1] + passwd[cursor_pos:]
+                        cursor_pos = max(0, cursor_pos - 1)
+                    elif event.key == pygame.K_LEFT:
+                        cursor_pos = max(0, cursor_pos - 1)
+                    elif event.key == pygame.K_RIGHT:
+                        cursor_pos = min(len(passwd), cursor_pos + 1)
+                    else:
+                        if event.unicode in string.ascii_letters + string.digits + string.punctuation:
+                            passwd = passwd[:cursor_pos] + event.unicode + passwd[cursor_pos:]
+                            cursor_pos += 1
                     
         pygame.display.update()
         

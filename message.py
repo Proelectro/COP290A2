@@ -44,5 +44,8 @@ def message(screen, background, title, text_list):
                     prev_button(pygame.mouse.get_pos())
                 except:
                     pass
+            elif event.type == pygame.MOUSEMOTION:
+                next_button.hover(pygame.mouse.get_pos())
+                prev_button.hover(pygame.mouse.get_pos())
     return 0
     

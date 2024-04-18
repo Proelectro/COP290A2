@@ -104,6 +104,11 @@ def bruteforce(screen, background):
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     raise Escape("Escape")
+            elif event.type == pygame.MOUSEMOTION:
+                if not pwd_set:
+                    set_pwd_button.hover(event.pos)
+                if pwd_found:
+                    next_button.hover(event.pos)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     if pwd_found and next_button(event.pos):

@@ -38,6 +38,9 @@ def intro(screen, background):
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     raise Escape("Escape")
+            elif event.type == pygame.MOUSEMOTION:
+                next_button.hover(pygame.mouse.get_pos())
+                prev_button.hover(pygame.mouse.get_pos())
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 
                 try:

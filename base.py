@@ -13,20 +13,49 @@ def split_text(text):
     return lines  
 class Button:
     def __init__(self, x, y, width, height, text, on_click = lambda: None):
-        self.rect = pygame.Rect(x, y, width, height )
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
         self.text = text
         self.on_click = on_click
         self.color = WHITE
         self.height = height
         self.width = width
         self.sound = pygame.mixer.Sound("sounds/click.wav")
+        self.background_color = GRAY
+        self.text_color = BLACK
+        # self.inside = False
 
     def draw(self, screen):
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height )
+        self.background_rect = pygame.Rect(self.x + 5, self.y + 8, self.width, self.height)
+        pygame.draw.rect(screen, self.background_color, self.background_rect, border_radius=(self.height // 4))
         pygame.draw.rect(screen, self.color, self.rect, border_radius=(self.height // 4))
         font = pygame.font.Font(*OPTION_FONT)
-        text_surface = font.render(self.text, True, BLACK)
+        text_surface = font.render(self.text, True, self.text_color)
         text_rect = text_surface.get_rect(center=self.rect.center)
         screen.blit(text_surface, text_rect)
+    
+    def hover(self, pos):
+        if self.rect.collidepoint(pos):
+            self.color = GRAY
+            self.background_color = BLACK
+            self.text_color = WHITE
+            # if not self.inside:
+            #     self.inside = True
+            #     self.width += 10
+            #     self.height += 10
+
+        else:
+            self.color = WHITE
+            self.background_color = GRAY
+            self.text_color = BLACK
+            
+            # if self.inside:
+            #     self.inside = False
+            #     self.width -= 10
+            #     self.height -= 10
 
     def __call__(self, pos):
         if self.rect.collidepoint(pos):
@@ -113,6 +142,9 @@ def draw_level(screen , background, level = True):
                     return 1
                 if hard(event.pos):
                     return 2
+            if event.type == pygame.MOUSEMOTION:
+                easy.hover(event.pos)
+                hard.hover(event.pos)
         
 
         

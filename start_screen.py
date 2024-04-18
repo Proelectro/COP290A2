@@ -28,6 +28,8 @@ def start_screen(screen, background):
                 return STATE.EXIT
             elif event.type == pygame.KEYDOWN:
                 pass
+            elif event.type == pygame.MOUSEMOTION:
+                play_button.hover(pygame.mouse.get_pos())
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button(pygame.mouse.get_pos()):
                     return STATE.INTRO

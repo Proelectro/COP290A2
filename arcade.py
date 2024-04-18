@@ -31,9 +31,14 @@ def arcade(screen, background):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if rocket_button(pygame.mouse.get_pos()):
                     return STATE.ROCKET
-                elif brute_button(pygame.mouse.get_pos()):
-                    return STATE.BRUTEFORCE
+                # elif brute_forcebutton(pygame.mouse.get_pos()):
+                #     return STATE.BRUTEFORCE
                 elif password_button(pygame.mouse.get_pos()):
                     return STATE.PASSWORD
                 elif maze_button(pygame.mouse.get_pos()):
                     return STATE.MAZE
+            elif event.type == pygame.MOUSEMOTION:
+                rocket_button.hover(pygame.mouse.get_pos())
+                # brute_button.hover(pygame.mouse.get_pos())
+                password_button.hover(pygame.mouse.get_pos())
+                maze_button.hover(pygame.mouse.get_pos())

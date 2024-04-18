@@ -28,15 +28,15 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("CyberSavvy Adventures")
 
 # Load background image
-background_1 = pygame.transform.scale(pygame.image.load('images/background.jpg'),(SCREEN_WIDTH, SCREEN_HEIGHT))  
+background_1 = pygame.transform.scale(pygame.image.load('images/background_hacker.jpg'),(SCREEN_WIDTH, SCREEN_HEIGHT))  
 background_2 = pygame.transform.scale(pygame.image.load('images/white_background.jpg'),(SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
 
 if __name__ == "__main__":
-    # state = STATE.START_SCREEN
+    state = STATE.START_SCREEN
     # state = STATE.PASSWORD
-    state = maze(screen, background_1, False)
+    # state = maze(screen, background_1, False)
     
     while state:
         try:
