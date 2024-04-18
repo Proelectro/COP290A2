@@ -28,7 +28,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("CyberSavvy Adventures")
 
 # Load background image
-background_1 = pygame.transform.scale(pygame.image.load('images/background_hacker.jpg'),(SCREEN_WIDTH, SCREEN_HEIGHT))  
+background_1 = pygame.transform.scale(pygame.image.load('images/purple bg.png'),(SCREEN_WIDTH, SCREEN_HEIGHT))  
 background_2 = pygame.transform.scale(pygame.image.load('images/white_background.jpg'),(SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
