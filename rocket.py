@@ -1,5 +1,28 @@
 from base import *
+from mcq import mcq
 import random
+
+
+question_1 = "What is the full form of URL?"
+options_1 = ["Uniform Reasearch Locator",
+            "Uniform Resource Link",
+            "Uniform Resource Locator",
+            ]
+
+answer_1 = 2
+explanation_1 = "URL stands for Uniform Resource Locator. It is the address of a resource on the internet."
+
+question_2 = "You got a popup on a website saving you 100$. All you have to do is to fill out a form. What will you do?"
+
+options_2 = ["Fill the form",
+            "Ignore the popup"]
+answer_2 = 1
+explanation_2 = "It is a scam to get your personal information."
+            
+questions = [question_1, question_2]
+options = [options_1, options_2]
+answers = [answer_1, answer_2]
+explanations = [explanation_1, explanation_2]
 
 class Player:
     images_off = [pygame.transform.scale(pygame.image.load("images/rocket_up.png"), (50, 50)),
@@ -61,14 +84,11 @@ class Player:
         if keys[pygame.K_DOWN]:
             self.direction = 2
 
-        # if keys[pygame.K_a]:
-        #     self.direction = 3
-        # if keys[pygame.K_d]:
-        #     self.direction = 1
-        # if keys[pygame.K_w]:
-        #     self.direction = 0
-        # if keys[pygame.K_s]:
-        #     self.direction = 2
+        self.x = max(0, self.x)
+        self.x = min(SCREEN_WIDTH - self.width, self.x)
+        self.y = max(NAV_BAR_HEIGHT, self.y)
+        self.y = min(SCREEN_HEIGHT - self.height, self.y)
+
 class Virus:
     images = [pygame.transform.scale(pygame.image.load('images/virus1.png'),(50,50))
     ,pygame.transform.scale(pygame.image.load('images/virus2.png'),(50,50))
@@ -95,6 +115,7 @@ class Virus:
         self.dying_period = 100
         self.dying_count = 0
         self.direction = dir
+        self.touch = False
         
     def draw(self, screen):
         if self.alive:
@@ -194,6 +215,7 @@ def rocket(screen, background, arcade = False):
     pause_button = Button(SCREEN_WIDTH - 120, 20, 100, 40, "Pause")
     player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT - 100)
     score = 0
+    mx_score = 0
     bullet = None    
     bullet_active = False
     game_over = False
@@ -232,7 +254,7 @@ def rocket(screen, background, arcade = False):
             if bullet.y < 0:
                 bullet_active = False
         if not pause:
-            if random.randint(0, 1000 * len(viruses) ** 2 / level**2) == 0:
+            if random.randint(0, 1000 * len(viruses) ** 2 // level**2) == 0:
                 dir = random.randint(0, 3)
                 virus_vel = 0.15*level
                 if dir == 0:
@@ -249,9 +271,14 @@ def rocket(screen, background, arcade = False):
             if not pause:
                 virus.move()
                 if virus.check_collision_player(player):
-                    game_over = True
+                    if arcade:
+                        game_over = True
+                        break
                     pygame.mixer.Channel(1).play(game_over_sfx)
-                    break
+                    if virus.touch == False:
+                        score -= 2
+                        score = max(0, score)
+                        virus.touch = True
                 if bullet_active:
                     if bullet.x < 0 or bullet.x > SCREEN_WIDTH or bullet.y < 0 or bullet.y > SCREEN_HEIGHT:
                         bullet_active = False
@@ -263,10 +290,13 @@ def rocket(screen, background, arcade = False):
                         dying_viruses.append(virus)
                         bullet_active = False
                         score += 1
-                        if score >= 4 and not arcade:
-                            return STATE.MAIN_MENU, True
+                        if score % 2 == 0 and not arcade and score > mx_score:
+                            assert mcq(screen, background, questions[score//2 - 1], options[score // 2 - 1], answers[score // 2 - 1], explanations[score // 2 - 1])
+                            if score // 2 == len(questions):
+                                return STATE.MAIN_MENU
+                        mx_score = max(score, mx_score)
                         continue
-            if virus.y > SCREEN_HEIGHT or virus.x < 0 or virus.x > SCREEN_WIDTH or virus.y < 0:
+            if virus.y > SCREEN_HEIGHT or virus.x < 0 or virus.x > SCREEN_WIDTH or virus.y < NAV_BAR_HEIGHT:
                 viruses.remove(virus)
                 score -= 1
                 score = max(0, score)
@@ -319,4 +349,4 @@ def rocket(screen, background, arcade = False):
                     raise Escape("Escape")
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    return STATE.MAIN_MENU, False
+                    return STATE.MAIN_MENU

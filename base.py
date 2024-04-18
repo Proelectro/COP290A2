@@ -1,6 +1,16 @@
 import pygame
 import sys
-
+def split_text(text):
+    max_char = 60
+    words = text.split()
+    lines = [""]
+    for word in words:
+        if len(lines[-1]) + len(word) + 1 <= max_char:
+            lines[-1] += " " + word
+        else:
+            lines.append(word)
+    
+    return lines  
 class Button:
     def __init__(self, x, y, width, height, text, on_click = lambda: None):
         self.rect = pygame.Rect(x, y, width, height )
@@ -42,21 +52,11 @@ class ScrollText:
         if self.scroll_pos_x_speed < len(self.text_list[self.index]) * self.scroll_speed:
             self.scroll_pos_x_speed += 1    
     
-    def split_text(self, text):
-        max_char = 50
-        words = text.split()
-        lines = [""]
-        for word in words:
-            if len(lines[-1]) + len(word) + 1 <= max_char:
-                lines[-1] += " " + word
-            else:
-                lines.append(word)
-        
-        return lines        
+          
     
     def draw(self, screen):
         text = self.text_list[self.index][:self.scroll_pos_x_speed//self.scroll_speed]
-        text_list = self.split_text(text)
+        text_list = split_text(text)
         y = self.y
         for txt in text_list:
             draw_text(screen, txt, self.font, self.color, self.x, y)

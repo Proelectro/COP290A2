@@ -43,7 +43,7 @@ class Person(Base):
         super().__init__(x, y, color)
         self.moving = False
         self.direction = 0
-        self.speed = 2
+        self.speed = 10
 
     def draw(self, screen):
         self.count += 1
@@ -69,7 +69,7 @@ class Virus(Base):
     def __init__(self, x, y, color):
         super().__init__(x, y, color)
         self.prev = (0, 1)
-        self.speed = 20
+        self.speed = 50
         self.image_index = 0
         self.image_period = 10
 
@@ -234,8 +234,8 @@ def maze(screen, popup_background, arcade = False):
         screen.fill(BLUE)
         draw_nav_bar(screen, "Maze")
         if num_players == 2:
-            draw_text(screen, "Score: " + str(score_1), pygame.font.Font(*TITLE_FONT), WHITE, SCREEN_WIDTH - 100, 40)
-            draw_text(screen, "Score: " + str(score_2), pygame.font.Font(*TITLE_FONT), WHITE, 100, 40)
+            draw_text(screen, "Score: " + str(score_1), pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH - 100, 40)
+            draw_text(screen, "Score: " + str(score_2), pygame.font.Font(*OPTION_FONT), WHITE, 100, 40)
         for event in pygame.event.get():
             
             if event.type == pygame.QUIT:

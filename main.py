@@ -35,7 +35,7 @@ background_2 = pygame.transform.scale(pygame.image.load('images/white_background
 
 if __name__ == "__main__":
     # state = STATE.START_SCREEN
-    state = STATE.MAZE
+    state = STATE.PASSWORD
     
     while state:
         try:
@@ -52,7 +52,7 @@ if __name__ == "__main__":
                 state = arcade(screen, background_1)
             
             elif state == STATE.ROCKET:
-                state, win = rocket(screen, background_1, True)
+                state = rocket(screen, background_1, True)
 
             elif state == STATE.BRUTEFORCE:
                 state = bruteforce(screen, background_1)            
@@ -75,45 +75,8 @@ if __name__ == "__main__":
                                     "Let us learn how strong passwards can be created."
                                     ])
                     assert password(screen, background_1)
-                    assert message(screen, background_1, "Internet Ethics",
-                                [
-                                    "Congratulations! You have created a strong password.",
-                                    "Now lets see some interesting facts about cyber security and internet ethics.",
-                                ])
-                    win = False
-                    while not win:
-                        state, win = rocket(screen, background_1)
-                        assert state
                     
-                    assert mcq(screen, background_1,
-                            "What is the full form of URL?",
-                                ["Uniform Reasearch Locator",
-                                "Uniform Resource Link",
-                                "Uniform Resource Locator",
-                                ],2,"Uniform Resource Locator")
-                    win = False
-                    while not win:
-                        state, win = rocket(screen, background_1)
-                        assert state
-                    
-                    assert mcq(screen, background_1,
-                            "Your parents use the same password for all their accounts. Is it safe?",
-                                ["Yes",
-                                "No",
-                                ],1,
-                                "Each password should be unique and strong to prevent hacking."
-                                )
-                    win = False
-                    while not win:
-                        state, win = rocket(screen, background_1)
-                        assert state
-                    
-                    assert mcq(screen, background_1,
-                            "You got a popup on a website saving you 100$. All you have to do is to fill out a form. What will you do?",
-                            ["Fill the form",
-                                "Ignore the popup",
-                                ],1, "It is a scam to get your personal information."
-                                )
+                    assert rocket(screen, background_1)
                 
                     assert message(screen, background_1, "Internet Ethics",
                                 [
