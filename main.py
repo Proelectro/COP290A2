@@ -35,7 +35,8 @@ background_2 = pygame.transform.scale(pygame.image.load('images/white_background
 
 if __name__ == "__main__":
     # state = STATE.START_SCREEN
-    state = STATE.PASSWORD
+    # state = STATE.PASSWORD
+    state = maze(screen, background_1, False)
     
     while state:
         try:

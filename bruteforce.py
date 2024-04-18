@@ -70,6 +70,7 @@ def bruteforce(screen, background):
     
     player_grid = Grid([[1, 0, 0], [0, 0, 1], [1, 2, 0]], (100, 150))
     computer_grid = Grid([[0, 0, 0], [0, 0, 1], [1, 1, 2]], (500, 150))
+    computer_grid.grid = [[BLACK] * 3] * 3
     set_pwd_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT - 70, 200, 50, "Set Password")
     next_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT - 70, 200, 50, "Next")
     msg1 = "To swap two blocks, click on one block"
@@ -115,15 +116,15 @@ def bruteforce(screen, background):
                         msg1 = "Computer is trying to find the password..."
                         msg2 = "By brute force method. Please wait..."
 
-        if pwd_set and not pwd_found and loop % 1 == 0:
+        if pwd_set and not pwd_found and loop % 5 == 0:
             try:
                 c = next(perm)
                 computer_grid.update(c)
                 tries += 1
                 if player_grid == computer_grid:
                     pwd_found = True
-                    msg1 = "Password found"
-                    msg2 = "Well done!"
+                    msg1 = "Hacker Has Found the Password"
+                    msg2 = f"in {tries} tries"
             except StopIteration:
                 pwd_found = True
                 msg1 = "Password not found"

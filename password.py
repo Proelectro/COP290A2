@@ -105,15 +105,15 @@ def password(screen, background, arcade = False):
         c[5] = Constraint("6). Your password must have a month", has_month)
         c[6] = Constraint("7). Your password must have a roman numeral", has_roman)
     else:
-        c = [None] * 5
-        c[0] = Constraint("1). Your password must have atleat 7 characters", has_length)
+        c = [None] * 7
+        c[0] = Constraint("1). Your password must have atleat 5 characters", has_length)
         c[1] = Constraint("2). Your password must have atleat 2 prime digits", has_prime)
         c[2] = Constraint("3). Your password must read the same forward & backward", is_pal)
         c[3] = Constraint("4). The sum of the digits in your password must be 25", has_add_25)
         captcha = Captcha()
         c[4] = Constraint(f"5). Your password must have the following captcha {captcha.captcha}", captcha.check)
-
-
+        c[5] = Constraint("6). Your password must have a month", has_month)
+        c[6] = Constraint("7). Your password must have a roman numeral", has_roman)
         
     running = True
     vaild = False

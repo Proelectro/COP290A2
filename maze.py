@@ -7,7 +7,8 @@ import os
 
 CELL_WIDTH = 30
 CELL_HEIGHT = 30
-MARGIN = 120
+MARGIN_TOP = 110
+MARGIN_LEFT = 45
 
 def sign(x):
     return -1 if x < 0 else 1
@@ -28,8 +29,8 @@ class Base:
     def draw(self, screen):
         self.count += 1
         if self.exist:
-            pygame.draw.rect(screen, self.color, (MARGIN + self.pos[1] * CELL_WIDTH, MARGIN + self.pos[0] * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT))
-
+            # pygame.draw.rect(screen, self.color, (MARGIN + self.pos[1] * CELL_WIDTH, MARGIN + self.pos[0] * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT))
+            pygame.draw.rect(screen, self.color, (MARGIN_LEFT + self.pos[1] * CELL_WIDTH, MARGIN_TOP + self.pos[0] * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT))
 class Person(Base):
 
     images = [pygame.transform.scale(pygame.image.load("images/rocket_up.png") , (CELL_WIDTH, CELL_HEIGHT)),
@@ -47,8 +48,8 @@ class Person(Base):
 
     def draw(self, screen):
         self.count += 1
-        screen.blit(self.images[self.direction], (self.pos[1]*CELL_WIDTH + MARGIN, self.pos[0]*CELL_HEIGHT + MARGIN))
-
+        # screen.blit(self.images[self.direction], (self.pos[1]*CELL_WIDTH + MARGIN, self.pos[0]*CELL_HEIGHT + MARGIN))
+        screen.blit(self.images[self.direction], (MARGIN_LEFT + self.pos[1]*CELL_WIDTH, MARGIN_TOP + self.pos[0]*CELL_HEIGHT))
 
     def move(self, n, m, maze):
         if self.moving and self.count % self.speed == 0:
@@ -69,7 +70,7 @@ class Virus(Base):
     def __init__(self, x, y, color):
         super().__init__(x, y, color)
         self.prev = (0, 1)
-        self.speed = 50
+        self.speed = 30
         self.image_index = 0
         self.image_period = 10
 
@@ -93,11 +94,11 @@ class Virus(Base):
         if self.count % self.speed == 0:
             flag = False
             while not moved:
-                rnd = random.randint(0, 50)
-                if flag or  rnd < 45:
+                rnd = random.randint(0, 100)
+                if flag or  rnd < 95:
                     direction = random.choices(high + low, weights=[30, 30, 1, 1])[0]
                     new_pos = (self.pos[0] + direction[0], self.pos[1] + direction[1])
-                elif rnd < 48:
+                elif rnd < 100:
                     direction = self.prev
                     flag = True
                     new_pos = (self.pos[0] + direction[0], self.pos[1] + direction[1])
@@ -120,7 +121,8 @@ class Virus(Base):
         if not self.exist:
             return
         self.count += 1
-        screen.blit(self.images[self.image_index], (self.pos[1]*CELL_WIDTH + MARGIN, self.pos[0]*CELL_HEIGHT + MARGIN))
+        # screen.blit(self.images[self.image_index], (self.pos[1]*CELL_WIDTH + MARGIN, self.pos[0]*CELL_HEIGHT + MARGIN))
+        screen.blit(self.images[self.image_index], (MARGIN_LEFT + self.pos[1]*CELL_WIDTH, MARGIN_TOP + self.pos[0]*CELL_HEIGHT))
         if self.count % self.image_period == 0:
             self.image_index = (self.image_index + 1) % len(self.images)
         
@@ -136,7 +138,8 @@ def draw_maze(screen, maze):
             if maze[i][j] == '#':
                 wall = pygame.image.load(os.path.join('images', 'wall.png'))
                 wall = pygame.transform.scale(wall, (CELL_WIDTH, CELL_HEIGHT))
-                screen.blit(wall, (MARGIN + j*CELL_WIDTH, MARGIN + i*CELL_HEIGHT))
+                # screen.blit(wall, (MARGIN + j*CELL_WIDTH, MARGIN + i*CELL_HEIGHT))
+                screen.blit(wall, (MARGIN_LEFT + j*CELL_WIDTH, MARGIN_TOP + i*CELL_HEIGHT))
 
 def popup(screen, background,  text_list):
     running = True
@@ -194,7 +197,7 @@ def maze(screen, popup_background, arcade = False):
     
     facts = [["Fact 1 TBA", "Fact line 2"], ["Fact 2 TBA", "Fact line 2"], ["Fact 3 TBA", "Fact line 2"], ["Fact 4 TBA", "Fact line 2"]] 
     # popup(screen, popup_background, facts[0])
-    maze = Maze(8, 12)
+    maze = Maze(8, 13)
     maze.generate()
     pygame.display.set_caption("Maze Game")
     clock = pygame.time.Clock()
