@@ -3,26 +3,41 @@ from mcq import mcq
 import random
 
 
-question_1 = "What is the full form of URL?"
-options_1 = ["Uniform Reasearch Locator",
-            "Uniform Resource Link",
-            "Uniform Resource Locator",
+question_1 = "You have a Social Media Account where you share your life updates, You will:"
+options_1 = ["Keep it public",
+            "Keep it private and accept only known people", 
+            "Keep it private and accept everybody",
             ]
 
-answer_1 = 2
-explanation_1 = "URL stands for Uniform Resource Locator. It is the address of a resource on the internet."
-
+answer_1 = 1
+explanation_1 = "This is the safest option to keep your personal information private and secure."
 question_2 = "You got a popup on a website saving you 100$. All you have to do is to fill out a form. What will you do?"
 
 options_2 = ["Fill the form",
             "Ignore the popup"]
 answer_2 = 1
-explanation_2 = "It is a scam to get your personal information."
+explanation_2 = "It is most probably a scam. You should not give out your information to unknown forms."
             
-questions = [question_1, question_2]
-options = [options_1, options_2]
-answers = [answer_1, answer_2]
-explanations = [explanation_1, explanation_2]
+
+question_3 = "You get an email to reset the password for your gaming accont."
+
+options_3 = ["Click the link ASAP" , "Delete the email" , "Check the email for any suspicious activity"]
+answer_3 = 2
+
+explanation_3 = "This is a common phishing scam. You should always check the email for any suspicious activity before clicking on any links."
+
+
+question_4 = "You almost got a virus from a website while downloading a pdf"
+
+options_4 = ["Install an antivirus software" , "Install an antivirus and update it regularly" , "Stop using the website"]
+answer_4 = 1
+
+explanation_4 = "It isn't just important to have an antivirus software, but also to update it regularly to keep your device secure."
+
+questions = [question_1, question_2, question_3, question_4]
+options = [options_1, options_2, options_3, options_4]
+answers = [answer_1, answer_2, answer_3, answer_4]
+explanations = [explanation_1, explanation_2, explanation_3, explanation_4]
 
 class Player:
     images_off = [pygame.transform.scale(pygame.image.load("images/rocket_up.png"), (50, 50)),

@@ -130,6 +130,7 @@ def password(screen, background, arcade = False):
         draw_password = passwd if level == 1 else "*" * len(passwd)
         draw_text(screen, draw_password[:cursor_pos] + [" ", "|"][cursor] + draw_password[cursor_pos:], pygame.font.Font(*OPTION_FONT), BLACK, 450, 135)
         draw_text(screen, f"Length: {len(passwd)}", pygame.font.Font(*OPTION_FONT), WHITE, 450, 180)
+        # print(passwd)
         message_pos_y = 220
         display_constraints = []
         for constraint in c:

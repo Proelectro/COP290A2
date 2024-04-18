@@ -7,7 +7,7 @@ def mcq(screen, background, question, options, correct_answer, explanation):
     running = True
     option_buttons = []
     for i, option in enumerate(options):
-        option_buttons.append(Button(SCREEN_WIDTH // 2 - 200, 250 + 60 * i, 400, 50, option))
+        option_buttons.append(Button(SCREEN_WIDTH // 2 - 300, 250 + 60 * i, 600, 50, option))
         option_buttons[-1].color = WHITE
     answered = False
     

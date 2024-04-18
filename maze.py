@@ -202,7 +202,14 @@ def maze(screen, popup_background, arcade = False):
     else:
         num_players = 1
     
-    facts = [["Fact 1 TBA", "Fact line 2"], ["Fact 2 TBA", "Fact line 2"], ["Fact 3 TBA", "Fact line 2"], ["Fact 4 TBA", "Fact line 2"]] 
+    facts = [["A firewall is a network security system that monitors and filters incoming and outgoing network traffic based on predetermined security rules.",
+              " It acts as a barrier between trusted internal networks and untrusted external networks to protect against unauthorized access and potential security threats."],
+                ["Fact 2 TBA", 
+                 "Fact line 2"], 
+                 ["Fact 3 TBA",
+                   "Fact line 2"],
+                     ["Fact 4 TBA", 
+                      "Fact line 2"]] 
     # popup(screen, popup_background, facts[0])
     maze = Maze(8, 13)
     maze.generate()
