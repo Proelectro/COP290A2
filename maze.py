@@ -31,12 +31,20 @@ class Base:
         if self.exist:
             # pygame.draw.rect(screen, self.color, (MARGIN + self.pos[1] * CELL_WIDTH, MARGIN + self.pos[0] * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT))
             pygame.draw.rect(screen, self.color, (MARGIN_LEFT + self.pos[1] * CELL_WIDTH, MARGIN_TOP + self.pos[0] * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT))
+
+
 class Person(Base):
 
-    images = [pygame.transform.scale(pygame.image.load("images/rocket_up.png") , (CELL_WIDTH, CELL_HEIGHT)),
-                pygame.transform.scale(pygame.image.load("images/rocket_down.png"), (CELL_WIDTH, CELL_HEIGHT)),
-                pygame.transform.scale(pygame.image.load("images/rocket_left.png"), (CELL_WIDTH, CELL_HEIGHT)),
-                pygame.transform.scale(pygame.image.load("images/rocket_right.png"), (CELL_WIDTH, CELL_HEIGHT))]
+    images_open = [pygame.transform.scale(pygame.image.load("images/pac2.png") , (CELL_WIDTH, CELL_HEIGHT)),
+                    pygame.transform.scale(pygame.image.load("images/pac4.png") , (CELL_WIDTH, CELL_HEIGHT)),
+                    pygame.transform.scale(pygame.image.load("images/pac3.png") , (CELL_WIDTH, CELL_HEIGHT)),
+                    pygame.transform.scale(pygame.image.load("images/pac1.png") , (CELL_WIDTH, CELL_HEIGHT))]
+    
+    images_close = [pygame.transform.scale(pygame.image.load("images/pac6.png") , (CELL_WIDTH, CELL_HEIGHT)),
+                    pygame.transform.scale(pygame.image.load("images/pac8.png") , (CELL_WIDTH, CELL_HEIGHT)),
+                    pygame.transform.scale(pygame.image.load("images/pac7.png") , (CELL_WIDTH, CELL_HEIGHT)),
+                    pygame.transform.scale(pygame.image.load("images/pac5.png") , (CELL_WIDTH, CELL_HEIGHT))]
+    
     
 
 
@@ -45,11 +53,18 @@ class Person(Base):
         self.moving = False
         self.direction = 0
         self.speed = 10
+        self.image_period = 100
+        self.image_count = 0
 
     def draw(self, screen):
         self.count += 1
+        self.image_count  = (self.image_count + 1) % self.image_period
         # screen.blit(self.images[self.direction], (self.pos[1]*CELL_WIDTH + MARGIN, self.pos[0]*CELL_HEIGHT + MARGIN))
-        screen.blit(self.images[self.direction], (MARGIN_LEFT + self.pos[1]*CELL_WIDTH, MARGIN_TOP + self.pos[0]*CELL_HEIGHT))
+
+        if self.image_count < self.image_period // 2:
+            screen.blit(self.images_open[self.direction], (MARGIN_LEFT + self.pos[1]*CELL_WIDTH, MARGIN_TOP + self.pos[0]*CELL_HEIGHT))
+        else:
+            screen.blit(self.images_close[self.direction], (MARGIN_LEFT + self.pos[1]*CELL_WIDTH, MARGIN_TOP + self.pos[0]*CELL_HEIGHT))
 
     def move(self, n, m, maze):
         if self.moving and self.count % self.speed == 0:
@@ -202,14 +217,14 @@ def maze(screen, popup_background, arcade = False):
     else:
         num_players = 1
     
-    facts = [["A firewall is a network security system that monitors and filters incoming and outgoing network traffic based on predetermined security rules.",
-              " It acts as a barrier between trusted internal networks and untrusted external networks to protect against unauthorized access and potential security threats."],
-                ["Fact 2 TBA", 
-                 "Fact line 2"], 
-                 ["Fact 3 TBA",
-                   "Fact line 2"],
-                     ["Fact 4 TBA", 
-                      "Fact line 2"]] 
+    facts = [["A firewall is a network security system that monitors and filters incoming and outgoing network traffic based on predetermined security rules."],
+               
+                ["A VPN, or Virtual Private Network, allows you to create a secure connection to another network over the Internet."],
+
+                ["A DDoS attack is a malicious attempt to disrupt normal traffic of a targeted server, service or network by overwhelming the target or its surrounding infrastructure with a flood of Internet traffic."],
+
+                ["A brute force attack is a trial-and-error method used to obtain information such as a user password or personal identification number (PIN)."],
+    ] 
     # popup(screen, popup_background, facts[0])
     maze = Maze(8, 13)
     maze.generate()
