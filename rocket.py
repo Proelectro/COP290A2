@@ -267,10 +267,8 @@ def rocket(screen, background, arcade = False):
             bullet.draw(screen)
             if not pause:
                 bullet.move()
-            if bullet.y < 0:
-                bullet_active = False
         if not pause:
-            if random.randint(0, 1000 * len(viruses) ** 2 // level**2) == 0:
+            if random.randint(0, 1000 * len(viruses) ** 2 // level) == 0:
                 dir = random.randint(0, 3)
                 virus_vel = 0.15*level
                 if dir == 0:
@@ -296,7 +294,7 @@ def rocket(screen, background, arcade = False):
                         score = max(0, score)
                         virus.touch = True
                 if bullet_active:
-                    if bullet.x < 0 or bullet.x > SCREEN_WIDTH or bullet.y < 0 or bullet.y > SCREEN_HEIGHT:
+                    if bullet.x < 0 or bullet.x > SCREEN_WIDTH or bullet.y < NAV_BAR_HEIGHT or bullet.y > SCREEN_HEIGHT:
                         bullet_active = False
                         continue
                     if virus.check_collision_bullet(bullet):

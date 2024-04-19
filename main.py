@@ -38,7 +38,7 @@ background_1 = pygame.transform.scale(pygame.image.load('images/rocket_backgroun
 
 if __name__ == "__main__":
     # state = STATE.START_SCREEN
-    state = STATE.MAZE
+    # state = STATE.MAZE
     state = maze(screen, background_1, False)
     
     while state:
@@ -72,7 +72,8 @@ if __name__ == "__main__":
                     assert message(screen, background_1, "Story Mode" , ["You will learn about important cyber security concepts in this game."])
                     assert message(screen, background_1,"Passwords", ["Do you know why our passwords should be strong?"
                                                                       , "Try creating your own password in the following puzzle."
-                                                                      , "A hacker will try to break your password."])
+                                                                      #, "A hacker will try to break your password."
+                                                                      ])
                     assert bruteforce(screen, background_1)
                     assert message(screen, background_1, "Strong Passwords",
                                 ["This was a brute force attack.",
@@ -87,8 +88,7 @@ if __name__ == "__main__":
                                         "Congratulations! You have created a strong password.",
                                         "Now let us move on to the next challenge.",
                                         "Let us now learn about internet ethics.",
-                                        "Move using the arrow keys.",
-                                        "Press 'Space' to shoot."
+                                        "Move using the arrow keys and shoot using the space bar.",
                                         "Prevent the viruses from entering your computer on the other side."
                                    ])
                     

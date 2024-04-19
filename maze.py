@@ -146,10 +146,6 @@ class Virus(Base):
             self.image_index = (self.image_index + 1) % len(self.images)
         
 
-def find_start_goal(maze):
-    start = ( 2*maze.start_x + 1, 2*maze.start_y+ 1)
-    goal = (2*maze.end_x+1,  2*maze.end_y+1)
-    return start, goal
 
 def draw_maze(screen, maze):
     for i in range(len(maze)):
@@ -160,21 +156,20 @@ def draw_maze(screen, maze):
                 # screen.blit(wall, (MARGIN + j*CELL_WIDTH, MARGIN + i*CELL_HEIGHT))
                 screen.blit(wall, (MARGIN_LEFT + j*CELL_WIDTH, MARGIN_TOP + i*CELL_HEIGHT))
 
-def popup(screen, background,  text_list):
+def popup(screen, background,  fact):
     running = True
-    
+    text_list = split_text(fact)    
     while running:
         screen.blit(background, (0, 0))
         draw_nav_bar(screen, "Did you know?")
-        y_pos = 250
+        y_pos = 210
         for text in text_list:
-            white_box = pygame.Rect(150, y_pos - 25, 600, 50)
-            pygame.draw.rect(screen, WHITE, white_box, border_radius=10)
-            draw_text(screen, text, pygame.font.Font(*OPTION_FONT), BLACK, SCREEN_WIDTH // 2, y_pos)
+            # white_box = pygame.Rect(150, y_pos - 25, 600, 50)
+            # pygame.draw.rect(screen, WHITE, white_box, border_radius=10)
+            draw_text(screen, text, pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, y_pos)
             y_pos += 80
-        # white_box = pygame.Rect(150, SCREEN_HEIGHT // 2 + 75, 600, 50)
-        # pygame.draw.rect(screen, WHITE, white_box, border_radius=10)
-        draw_text(screen, "Click anywhere to continue...", pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 100)
+
+        draw_text(screen, "Click anywhere to continue...", pygame.font.Font(*OPTION_FONT), GREEN, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 200)
         pygame.display.update()
         
         for event in pygame.event.get():
@@ -192,9 +187,12 @@ def display_final_score(screen, background, score_1, score_2 = -1):
     running = True
     while running:
         screen.blit(background, (0, 0))
-        draw_nav_bar(screen, "Score")
         if score_2 == -1:
-            draw_text(screen, "Time Taken: " + str(score_1) + " seconds", pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+            draw_nav_bar(screen, "Time Taken")
+        else:
+            draw_nav_bar(screen, "Score")
+        if score_2 == -1:
+            draw_text(screen, "Captured all viruses in " + str(score_1) + " seconds", pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
         else:
             draw_text(screen, "Player 1: " + str(score_1), pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50)
             draw_text(screen, "Player 2: " + str(score_2), pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
@@ -210,24 +208,28 @@ def display_final_score(screen, background, score_1, score_2 = -1):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 running = False
     return STATE.MAIN_MENU
-def maze(screen, popup_background, arcade = False):
+def maze(screen, background, arcade = False):
 
     chomp = pygame.mixer.Sound("sounds/pacman_chomp.wav")
     
     if arcade:
-        num_players = draw_level(screen, popup_background, level = False)
+        num_players = draw_level(screen, background, level = False)
     else:
         num_players = 1
     
-    facts = [["A firewall is a network security system that monitors and filters incoming and outgoing network traffic based on predetermined security rules."],
+    facts = ["A firewall is a network security system that monitors and filters incoming and outgoing network traffic based on predetermined security rules.",
                
-                ["A VPN, or Virtual Private Network, allows you to create a secure connection to another network over the Internet."],
+                "A VPN, or Virtual Private Network, allows you to create a secure connection to another network over the Internet.",
 
-                ["A DDoS attack is a malicious attempt to disrupt normal traffic of a targeted server, service or network by overwhelming the target or its surrounding infrastructure with a flood of Internet traffic."],
+                "A DDoS attack is a malicious attempt to disrupt normal traffic of a targeted server, service or network by overwhelming the target or its surrounding infrastructure with a flood of Internet traffic.",
 
-                ["A brute force attack is a trial-and-error method used to obtain information such as a user password or personal identification number (PIN)."],
+             "A brute force attack is a trial-and-error method used to obtain information such as a user password or personal identification number (PIN).",
     ] 
-    # popup(screen, popup_background, facts[0])
+    # popup(screen, background, facts[0])
+    # popup(screen, background, facts[1])
+    # popup(screen, background, facts[2])
+    # popup(screen, background, facts[3])
+
     maze = Maze(8, 13)
     maze.generate()
     pygame.display.set_caption("Maze Game")
@@ -266,7 +268,7 @@ def maze(screen, popup_background, arcade = False):
     not_started = True
     while running:
         # screen.fill(BLUE)
-        screen.blit(popup_background, (0, 0))
+        screen.blit(background, (0, 0))
         draw_nav_bar(screen, "Maze")
         if num_players == 2:
             draw_text(screen, "Score: " + str(score_1), pygame.font.Font(*OPTION_FONT), WHITE, SCREEN_WIDTH - 100, 40)
@@ -327,7 +329,7 @@ def maze(screen, popup_background, arcade = False):
                     score_1 += 1
                     chomp.play()
                     if not arcade:
-                        assert popup(screen, popup_background, facts[i])
+                        assert popup(screen, background, facts[i])
                 if num_players == 2 and player_2 == virus and virus.exist:
                     chomp.play()
                     virus.exist = False
@@ -337,13 +339,14 @@ def maze(screen, popup_background, arcade = False):
             
             if total_virus == 0:
                 if num_players == 2:
-                    assert display_final_score(screen, popup_background, score_1, score_2)
+                    assert display_final_score(screen, background, score_1, score_2)
                 else:
-                    end_time = time.time()
-                    time_taken = end_time - start_time
-                    ## display only uptill 2 decimal places
-                    time_taken = round(time_taken, 2)
-                    assert display_final_score(screen, popup_background, time_taken)
+                    if arcade:
+                        end_time = time.time()
+                        time_taken = end_time - start_time
+                        ## display only uptill 2 decimal places
+                        time_taken = round(time_taken, 2)
+                        assert display_final_score(screen, background, time_taken)
                 return STATE.MAIN_MENU
         pygame.display.flip()
 
