@@ -37,9 +37,9 @@ background_1 = pygame.transform.scale(pygame.image.load('images/rocket_backgroun
 
 
 if __name__ == "__main__":
-    # state = STATE.START_SCREEN
+    state = STATE.START_SCREEN
     # state = STATE.MAZE
-    state = maze(screen, background_1, False)
+    # state = maze(screen, background_1, False)
     
     while state:
         try:
