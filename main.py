@@ -21,6 +21,8 @@ pygame.mixer.set_num_channels(10)
 background_music = pygame.mixer.Sound("sounds/background_music.wav")
 background_music.set_volume(0.1)
 background_music.play(-1)
+victory_music = pygame.mixer.Sound("sounds/tadaa.wav")
+
 
 
 # Initialize the screen
@@ -104,6 +106,8 @@ if __name__ == "__main__":
                                     ,"Now you need to catch them all."
                                     ])
                     assert maze(screen, background_1)
+                    victory_music.play()
+
                     assert message(screen, background_1, "Congratulations",
                                 ["Congratulations! You have won the game."])
                     state = STATE.MAIN_MENU

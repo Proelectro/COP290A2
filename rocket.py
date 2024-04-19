@@ -241,9 +241,10 @@ def rocket(screen, background, arcade = False):
     bg_y = 0
     
     pause = False
-    background_music.play()
+    # background_music.play()
 
     while running and not game_over:
+        background_music.play()
    
      
         # show the score on top right
