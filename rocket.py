@@ -214,7 +214,7 @@ def rocket(screen, background, arcade = False):
         level = 1
         
     background_music = pygame.mixer.Sound("sounds/background_music.wav")
-    background_music.set_volume(0.1)
+    background_music.set_volume(0.01)
     
     
 

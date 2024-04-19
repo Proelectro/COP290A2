@@ -30,16 +30,17 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Cyber Adventures")
 
 # Load background image
-# background_1 = pygame.transform.scale(pygame.image.load('images/purple_background.jpg'),(SCREEN_WIDTH, SCREEN_HEIGHT))  
 background_2 = pygame.transform.scale(pygame.image.load('images/rocket_background.jpg'),(SCREEN_WIDTH, SCREEN_HEIGHT))
 background_1 = pygame.transform.scale(pygame.image.load('images/rocket_background.jpg'),(SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
 
 if __name__ == "__main__":
+
+    # FInite State Machine for the game
+
     state = STATE.START_SCREEN
-    # state = STATE.MAZE
-    # state = maze(screen, background_1, False)
+
     
     while state:
         try:

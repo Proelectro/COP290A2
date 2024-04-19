@@ -11,6 +11,9 @@ def split_text(text):
             lines.append(word)
     
     return lines  
+
+# Button class
+
 class Button:
     def __init__(self, x, y, width, height, text, on_click = lambda: None):
         self.x = x
@@ -63,6 +66,10 @@ class Button:
             self.sound.play()
             return True
         return False
+    
+
+
+# ScrollText class
 
 class ScrollText:
     def __init__(self, x, y, width, height, text_list, font, color, speed=1):
@@ -104,6 +111,10 @@ class ScrollText:
         if self.index < 0:
             self.index = 0
             raise IndexError("Start of text list")
+        
+
+
+# Draw nav bar
         
 def draw_nav_bar(screen, title):
     pygame.draw.rect(screen, DARK_GRAY, (0, 0, SCREEN_WIDTH, NAV_BAR_HEIGHT))
@@ -163,6 +174,9 @@ class STATE:
     PASSWORD = 7
     MAZE = 8
     STORY = 9
+
+
+# Constants
 
 SCREEN_WIDTH = 900
 SCREEN_HEIGHT = 650

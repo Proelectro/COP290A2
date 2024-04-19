@@ -211,6 +211,9 @@ def display_final_score(screen, background, score_1, score_2 = -1):
 def maze(screen, background, arcade = False):
 
     chomp = pygame.mixer.Sound("sounds/pacman_chomp.wav")
+    background_music = pygame.mixer.Sound("sounds/background_music.wav")
+    background_music.set_volume(0.01)
+    
     
     if arcade:
         num_players = draw_level(screen, background, level = False)
@@ -267,6 +270,7 @@ def maze(screen, background, arcade = False):
         viruses.append(Virus(random.randint(0, maze.n - 1), random.randint(0, maze.m - 1), GREEN))
     not_started = True
     while running:
+        background_music.play()
         # screen.fill(BLUE)
         screen.blit(background, (0, 0))
         draw_nav_bar(screen, "Maze")
@@ -327,11 +331,11 @@ def maze(screen, background, arcade = False):
                 if player_1 == virus and virus.exist:
                     virus.exist = False
                     score_1 += 1
-                    chomp.play()
+                    pygame.mixer.Channel(1).play(chomp)
                     if not arcade:
                         assert popup(screen, background, facts[i])
                 if num_players == 2 and player_2 == virus and virus.exist:
-                    chomp.play()
+                    pygame.mixer.Channel(1).play(chomp)
                     virus.exist = False
                     score_2 += 1
                                             
